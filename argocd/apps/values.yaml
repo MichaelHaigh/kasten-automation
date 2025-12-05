@@ -1,0 +1,13 @@
+config:
+  spec:
+    destination:
+      server: https://kubernetes.default.svc
+
+applications:
+  - name: pacman
+    tool:
+      helm:
+        releaseName: pacman
+    source:
+      repoURL: https://michaelhaigh.github.io/pacman/
+      targetRevision: master

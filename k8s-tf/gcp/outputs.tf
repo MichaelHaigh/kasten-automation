@@ -11,6 +11,10 @@ output "argocd_endpoint" {
   description = "The URL to access the ArgoCD UI"
   value       = "https://${data.kubernetes_service.argocd_server.status.0.load_balancer.0.ingress[0].ip}"
 }
+output "argocd_apply_app_of_apps_cmd" {
+  description = "The command to run to deploy the app of apps yaml"
+  value       = "kubectl apply -f ../../argocd/app.yaml"
+}
 output "client_token" {
   sensitive = true
   value     = base64encode(data.google_client_config.default.access_token)
