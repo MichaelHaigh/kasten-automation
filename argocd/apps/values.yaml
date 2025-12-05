@@ -10,4 +10,4 @@ applications:
         releaseName: pacman
     source:
       repoURL: https://michaelhaigh.github.io/pacman/
-      targetRevision: master
+      targetRevision: argocd-setup # change to main when merging to main

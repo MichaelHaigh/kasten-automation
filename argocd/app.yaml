@@ -10,7 +10,7 @@ spec:
   source:
     path: argocd/apps
     repoURL: https://github.com/MichaelHaigh/kasten-automation
-    targetRevision: argocd-setup
+    targetRevision: argocd-setup # change to main when merging to main
   sources: []
   project: default
   syncPolicy:

@@ -22,7 +22,7 @@ resource "helm_release" "argocd" {
     }
   ]
 
-  #depends_on = [time_sleep.wait_for_gke]
+  depends_on = [time_sleep.wait_for_gke]
 }
 
 resource "time_sleep" "wait_for_argocd" {
