@@ -9,6 +9,9 @@ applications:
     tool:
       helm:
         releaseName: pacman
+        valuesObject:
+          service:
+            type: LoadBalancer
     source:
       repoURL: https://michaelhaigh.github.io/pacman/
       targetRevision: 0.1.23
