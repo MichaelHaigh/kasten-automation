@@ -4,6 +4,18 @@ config:
       server: https://kubernetes.default.svc
 
 applications:
+  - name: kasten-io
+    chart: k10
+    tool:
+      helm:
+        releaseName: k10
+        valuesObject:
+          auth:
+            tokenAuth:
+              enabled: true
+    source:
+      repoURL: https://charts.kasten.io/
+      targetRevision: 8.0.14
   - name: pacman
     chart: pacman
     tool:
