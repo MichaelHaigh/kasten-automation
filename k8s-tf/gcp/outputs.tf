@@ -1,19 +1,19 @@
 output "argocd_admin_secret" {
   description = "The ArgoCD initial admin secret"
   sensitive   = true
-  value       = data.kubernetes_secret.argocd_admin_secret.data.password
+  value       = var.argocd_deployment ? data.kubernetes_secret.argocd_admin_secret[0].data.password : "ArgoCD not deployed"
 }
 output "argocd_admin_secret_copy_cmd" {
   description = "A command to copy the ArgoCD initial admin secret to the clipboard"
-  value       = "terraform output -raw argocd_admin_secret | pbcopy"
+  value       = var.argocd_deployment ? "terraform output -raw argocd_admin_secret | pbcopy" : "ArgoCD not deployed"
 }
 output "argocd_endpoint" {
   description = "The URL to access the ArgoCD UI"
-  value       = "https://${data.kubernetes_service.argocd_server.status.0.load_balancer.0.ingress[0].ip}"
+  value       = var.argocd_deployment ? "https://${data.kubernetes_service.argocd_server[0].status.0.load_balancer.0.ingress[0].ip}" : "ArgoCD not deployed"
 }
 output "argocd_apply_app_of_apps_cmd" {
   description = "The command to run to deploy the app of apps yaml"
-  value       = "kubectl apply -f ../../argocd/app.yaml"
+  value       = var.argocd_deployment ? "kubectl apply -f ../../argocd/app.yaml" : "ArgoCD not deployed"
 }
 output "client_token" {
   sensitive = true

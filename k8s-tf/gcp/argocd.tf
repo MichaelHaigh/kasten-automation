@@ -1,9 +1,11 @@
 resource "time_sleep" "wait_for_gke" {
+  count           = (var.argocd_deployment) ? 1 : 0
   depends_on      = [module.gke]
   create_duration = "2m"
 }
 
 resource "helm_release" "argocd" {
+  count            = (var.argocd_deployment) ? 1 : 0
   name             = "argocd"
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
@@ -26,11 +28,13 @@ resource "helm_release" "argocd" {
 }
 
 resource "time_sleep" "wait_for_argocd" {
+  count           = (var.argocd_deployment) ? 1 : 0
   depends_on      = [helm_release.argocd]
   create_duration = "3m"
 }
 
 data "kubernetes_service" "argocd_server" {
+  count      = (var.argocd_deployment) ? 1 : 0
   depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-server"
@@ -39,6 +43,7 @@ data "kubernetes_service" "argocd_server" {
 }
 
 data "kubernetes_secret" "argocd_admin_secret" {
+  count      = (var.argocd_deployment) ? 1 : 0
   depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-initial-admin-secret"

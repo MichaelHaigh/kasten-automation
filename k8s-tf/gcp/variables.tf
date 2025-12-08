@@ -86,6 +86,10 @@ variable "authorized_networks" {
 }
 
 # ArgoCD Settings
+variable "argocd_deployment" {
+  type        = bool
+  description = "Whether to deploy Argo CD or not"
+}
 variable "argocd_namespace" {
   type        = string
   description = "The namespace to deploy Argo CD into"
