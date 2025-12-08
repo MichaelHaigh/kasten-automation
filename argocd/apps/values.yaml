@@ -5,9 +5,10 @@ config:
 
 applications:
   - name: pacman
+    chart: pacman
     tool:
       helm:
         releaseName: pacman
     source:
       repoURL: https://michaelhaigh.github.io/pacman/
-      targetRevision: main
+      targetRevision: 0.1.23

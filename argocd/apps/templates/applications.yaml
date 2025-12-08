@@ -16,6 +16,9 @@ spec:
     path: {{ .path | default .name | quote }}
     repoURL: {{ .source.repoURL }}
     targetRevision: {{ .source.targetRevision }}
+    {{- if .chart }}
+    chart: {{ .chart }}
+    {{- end }}
     {{- with .tool }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
