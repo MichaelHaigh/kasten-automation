@@ -13,6 +13,8 @@ applications:
           auth:
             tokenAuth:
               enabled: true
+          externalGateway:
+            create: true
     source:
       repoURL: https://charts.kasten.io/
       targetRevision: 8.0.14
