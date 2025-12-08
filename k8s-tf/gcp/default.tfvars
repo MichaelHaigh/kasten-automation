@@ -37,5 +37,6 @@ authorized_networks = [
 ]
 
 # ArgoCD Settings
-argocd_namespace = "argocd"
-argocd_version   = "9.1.6"
+argocd_deployment = true
+argocd_namespace  = "argocd"
+argocd_version    = "9.1.6"
