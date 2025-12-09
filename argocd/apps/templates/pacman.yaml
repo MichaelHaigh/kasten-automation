@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pacman
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: pacman
+    server: {{ .Values.spec.destination.server }}
+  project: default
+  sources:
+    - repoURL: https://michaelhaigh.github.io/pacman/
+      targetRevision: 0.1.23
+      chart: pacman
+      helm:
+        releaseName: pacman
+        valuesObject:
+          service:
+            type: LoadBalancer
+    - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
+      targetRevision: argocd-setup # change to main when merging to main
+      path: argocd/kasten-policies/pacman

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: apps
+  name: app-of-apps
   namespace: argocd
 spec:
   destination:
@@ -11,6 +11,8 @@ spec:
     path: argocd/apps
     repoURL: https://github.com/MichaelHaigh/kasten-automation
     targetRevision: argocd-setup # change to main when merging to main
+    directory:
+      recurse: true
   sources: []
   project: default
   syncPolicy:
