@@ -8,8 +8,7 @@ metadata:
 spec:
   destination:
     namespace: pacman
-    server: {{ .Values.spec.destination.server }}
-    #server: https://kubernetes.default.svc
+    server: {{ .Values.spec.destination.server| quote }}
   project: default
   sources:
     - repoURL: https://michaelhaigh.github.io/pacman/
