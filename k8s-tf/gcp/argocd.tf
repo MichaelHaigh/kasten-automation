@@ -4,6 +4,20 @@ resource "time_sleep" "wait_for_gke" {
   create_duration = "2m"
 }
 
+resource "kubernetes_secret" "external_secrets_operator" {
+  count      = (var.argocd_deployment) ? 1 : 0
+  depends_on = [time_sleep.wait_for_gke]
+
+  metadata {
+    name      = "external-secrets-operator-secret"
+    namespace = "kube-system"
+  }
+
+  data = {
+    "secret-access-credentials" = file(var.sa_creds)
+  }
+}
+
 resource "helm_release" "argocd" {
   count            = (var.argocd_deployment) ? 1 : 0
   name             = "argocd"
