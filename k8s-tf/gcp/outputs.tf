@@ -13,7 +13,7 @@ output "argocd_endpoint" {
 }
 output "argocd_apply_app_of_apps_cmd" {
   description = "The command to run to deploy the app of apps yaml"
-  value       = var.argocd_deployment ? "kubectl apply -f ../../argocd/app.yaml" : "ArgoCD not deployed"
+  value       = var.argocd_deployment ? "kubectl apply -f ../../argocd/app-of-apps.yaml" : "ArgoCD not deployed"
 }
 output "client_token" {
   sensitive = true
