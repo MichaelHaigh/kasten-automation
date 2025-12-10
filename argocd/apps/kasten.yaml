@@ -1,6 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
   name: kasten-io
   namespace: argocd
   finalizers:
@@ -22,6 +24,8 @@ spec:
               enabled: true
           externalGateway:
             create: true
+          secrets:
+            googleClientSecretName: google-storageadmin-sa
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: argocd-setup # change to main when merging to main
       path: argocd/kasten-policies/kasten
