@@ -20,6 +20,27 @@ resource "google_secret_manager_secret_version" "k10_sa_creds_version" {
   secret_data           = filebase64(var.k10_sa_creds)
 }
 
+resource "google_secret_manager_secret" "gcp_project" {
+  count     = (var.argocd_deployment) ? 1 : 0
+  secret_id = "projectid-${terraform.workspace}-${var.creator_label}"
+
+  labels = {
+    creator    = var.creator_label
+    managed_by = "terraform"
+    workspace  = terraform.workspace
+  }
+
+  replication {
+    auto {}
+  }
+}
+resource "google_secret_manager_secret_version" "gcp_project_version" {
+  count  = (var.argocd_deployment) ? 1 : 0
+  secret = google_secret_manager_secret.gcp_project[0].id
+
+  secret_data = var.gcp_project
+}
+
 resource "time_sleep" "wait_for_gke" {
   count           = (var.argocd_deployment) ? 1 : 0
   depends_on      = [module.gke]
