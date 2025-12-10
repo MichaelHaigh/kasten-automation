@@ -1,5 +1,6 @@
 # GCP Settings
 sa_creds           = "~/.gcp/mhaigh-terraform-1a95c215426d.json"
+k10_sa_creds       = "~/.gcp/k10-mhaigh-sa-key.json"
 gcp_sa             = "mhaigh-terraform@rich-access-174020.iam.gserviceaccount.com"
 gcp_project        = "rich-access-174020"
 gcp_project_number = "215900857647"

@@ -3,6 +3,10 @@ variable "sa_creds" {
   type        = string
   description = "The Service Account json file path on local machine"
 }
+variable "k10_sa_creds" {
+  type = string
+  description = "The K10 GCP Service Account (with compute.storageAdmin role) file path on local machine"
+}
 variable "gcp_sa" {
   type        = string
   description = "The name of the GCP Service Account"

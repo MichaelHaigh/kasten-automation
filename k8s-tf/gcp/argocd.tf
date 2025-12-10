@@ -1,3 +1,25 @@
+resource "google_secret_manager_secret" "k10_sa_creds" {
+  count     = (var.argocd_deployment) ? 1 : 0
+  secret_id = "k10-sa-${terraform.workspace}-${var.creator_label}"
+
+  labels = {
+    creator    = var.creator_label
+    managed_by = "terraform"
+    workspace  = terraform.workspace
+  }
+
+  replication {
+    auto {}
+  }
+}
+resource "google_secret_manager_secret_version" "k10_sa_creds_version" {
+  count  = (var.argocd_deployment) ? 1 : 0
+  secret = google_secret_manager_secret.k10_sa_creds[0].id
+
+  is_secret_data_base64 = true
+  secret_data           = filebase64(var.k10_sa_creds)
+}
+
 resource "time_sleep" "wait_for_gke" {
   count           = (var.argocd_deployment) ? 1 : 0
   depends_on      = [module.gke]
