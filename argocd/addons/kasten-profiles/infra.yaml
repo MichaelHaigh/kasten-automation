@@ -1,0 +1,33 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: k10-sa-key
+  namespace: kasten-io
+spec:
+  secretStoreRef:
+    name: cloud-cluster-secret-store
+    kind: ClusterSecretStore
+  target:
+    name: k10secret-gcp-sa-key
+    creationPolicy: Owner
+  data:
+  - secretKey: service-account.json
+    remoteRef:
+      key: k10-sa-default-mhaigh
+---
+kind: Profile
+apiVersion: config.kio.kasten.io/v1alpha1
+metadata:
+  name: default-gcp-profile
+  namespace: kasten-io
+spec:
+  infra:
+    credential:
+      secretType: GcpServiceAccountKey
+      secret:
+        apiVersion: v1
+        kind: secret
+        name: k10secret-gcp-sa-key
+        namespace: kasten-io
+    type: GCP
+  type: Infra

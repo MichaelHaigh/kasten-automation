@@ -1,6 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
   name: pacman
   namespace: argocd
   finalizers:
@@ -21,7 +23,7 @@ spec:
             type: LoadBalancer
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: argocd-setup # change to main when merging to main
-      path: argocd/kasten-policies/pacman
+      path: argocd/addons/pacman
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
