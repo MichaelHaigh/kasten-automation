@@ -107,3 +107,26 @@ data "kubernetes_secret" "argocd_admin_secret" {
     namespace = var.argocd_namespace
   }
 }
+
+resource "kubernetes_config_map_v1_data" "argocd_cm" {
+  metadata {
+    name      = "argocd-cm"
+    namespace = var.argocd_namespace
+  }
+  data = {
+    "resource.customizations.health.argoproj.io_Application" = <<-EOT
+      hs = {}
+      hs.status = "Progressing"
+      hs.message = ""
+      if obj.status ~= nil then
+        if obj.status.health ~= nil then
+          hs.status = obj.status.health.status
+          if obj.status.health.message ~= nil then
+            hs.message = obj.status.health.message
+          end
+        end
+      end
+      return hs
+      EOT
+  }
+}

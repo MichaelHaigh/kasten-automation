@@ -1,3 +1,7 @@
+# GitHub Settings
+github_repo_token = "~/.github/kasten-automation"
+github_repo       = "kasten-automation"
+
 # GCP Settings
 sa_creds           = "~/.gcp/mhaigh-terraform-1a95c215426d.json"
 k10_sa_creds       = "~/.gcp/k10-mhaigh-sa-key.json"

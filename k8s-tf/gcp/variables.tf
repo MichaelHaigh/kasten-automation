@@ -1,3 +1,12 @@
+# GitHub Settings
+variable "github_repo_token" {
+  type = string
+  description = "The file path on the local machine containing a read/write GitHub repository token"
+}
+variable "github_repo" {
+  type = string
+  description = "The name of the GitHub repository"
+}
 # GCP Settings
 variable "sa_creds" {
   type        = string
