@@ -89,9 +89,7 @@ metadata:
   name: pacman-backup
   namespace: kasten-io
 spec:
-  comment: ""
   frequency: "@hourly"
-  paused: false
   actions:
     - action: backup
     - action: export
@@ -100,7 +98,6 @@ spec:
         profile:
           name: gcp-location-${terraform.workspace}-${var.creator_label}
           namespace: kasten-io
-        receiveString: ""
         exportData:
           enabled: true
       retention:
