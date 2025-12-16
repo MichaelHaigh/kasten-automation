@@ -15,5 +15,7 @@ spec:
       secretType: GcpServiceAccountKey
     objectStore:
       name: k10-default-mhaigh
+      objectStoreType: GCS
       region: us-central1
+    type: ObjectStore
   type: Location
