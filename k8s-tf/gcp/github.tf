@@ -1,7 +1,5 @@
-resource "local_file" "addons_externalsecrets_clustersecretstore" {
-  count    = (var.argocd_deployment) ? 1 : 0
-  filename = "~/kasten-automation/argocd/addons/external-secrets/cluster-secret-store.yaml"
-  content  = <<YAML
+locals {
+  cluster-secret-store = <<YAML
 # Auto-generated file, do not edit directly
 apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
@@ -18,22 +16,7 @@ spec:
             namespace: kube-system
       projectID: ${var.gcp_project}
 YAML
-}
-
-resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
-  count               = (var.argocd_deployment) ? 1 : 0
-  repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/external-secrets/cluster-secret-store.yaml"
-  content             = local_file.addons_externalsecrets_clustersecretstore[0].content
-  commit_message      = "automated(${terraform.workspace}): update cluster-secret-store.yaml via 'terraform apply'"
-  overwrite_on_create = true
-}
-
-resource "local_file" "addons_kastenio_externalsecret" {
-  count    = (var.argocd_deployment) ? 1 : 0
-  filename = "~/kasten-automation/argocd/addons/kasten-io/external-secret.yaml"
-  content  = <<YAML
+  external-secret      = <<YAML
 # Auto-generated file, do not edit directly
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -55,22 +38,7 @@ spec:
     remoteRef:
       key: k10-sa-${terraform.workspace}-${var.creator_label}
 YAML
-}
-
-resource "github_repository_file" "addons_kastenio_externalsecret" {
-  count               = (var.argocd_deployment) ? 1 : 0
-  repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/kasten-io/external-secret.yaml"
-  content             = local_file.addons_kastenio_externalsecret[0].content
-  commit_message      = "automated(${terraform.workspace}): update external-secret.yaml via 'terraform apply'"
-  overwrite_on_create = true
-}
-
-resource "local_file" "addons_kastenprofiles_infra" {
-  count    = (var.argocd_deployment) ? 1 : 0
-  filename = "~/kasten-automation/argocd/addons/kasten-profiles/infra.yaml"
-  content  = <<YAML
+  infra                = <<YAML
 # Auto-generated file, do not edit directly
 kind: Profile
 apiVersion: config.kio.kasten.io/v1alpha1
@@ -89,22 +57,7 @@ spec:
     type: GCP
   type: Infra
 YAML
-}
-
-resource "github_repository_file" "addons_kastenprofiles_infra" {
-  count               = (var.argocd_deployment) ? 1 : 0
-  repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/kasten-profiles/infra.yaml"
-  content             = local_file.addons_kastenprofiles_infra[0].content
-  commit_message      = "automated(${terraform.workspace}): update infra.yaml via 'terraform apply'"
-  overwrite_on_create = true
-}
-
-resource "local_file" "addons_kastenprofiles_location" {
-  count    = (var.argocd_deployment) ? 1 : 0
-  filename = "~/kasten-automation/argocd/addons/kasten-profiles/location.yaml"
-  content  = <<YAML
+  location             = <<YAML
 # Auto-generated file, do not edit directly
 apiVersion: config.kio.kasten.io/v1alpha1
 kind: Profile
@@ -127,12 +80,42 @@ spec:
 YAML
 }
 
+resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = "argocd-setup" # change to main when merging to main
+  file                = "argocd/addons/external-secrets/cluster-secret-store.yaml"
+  content             = local.cluster-secret-store
+  commit_message      = "automated(${terraform.workspace}): update cluster-secret-store.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+
+resource "github_repository_file" "addons_kastenio_externalsecret" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = "argocd-setup" # change to main when merging to main
+  file                = "argocd/addons/kasten-io/external-secret.yaml"
+  content             = local.external-secret
+  commit_message      = "automated(${terraform.workspace}): update external-secret.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+
+resource "github_repository_file" "addons_kastenprofiles_infra" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = "argocd-setup" # change to main when merging to main
+  file                = "argocd/addons/kasten-profiles/infra.yaml"
+  content             = local.infra
+  commit_message      = "automated(${terraform.workspace}): update infra.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+
 resource "github_repository_file" "addons_kastenprofiles_location" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
   file                = "argocd/addons/kasten-profiles/location.yaml"
-  content             = local_file.addons_kastenprofiles_location[0].content
+  content             = local.location
   commit_message      = "automated(${terraform.workspace}): update location.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
