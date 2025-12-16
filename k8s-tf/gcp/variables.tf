@@ -1,19 +1,24 @@
 # GitHub Settings
-variable "github_repo_token" {
-  type = string
-  description = "The file path on the local machine containing a read/write GitHub repository token"
+variable "github_owner" {
+  type        = string
+  description = "The owner (user or organization) of the GitHub repository"
 }
 variable "github_repo" {
-  type = string
+  type        = string
   description = "The name of the GitHub repository"
 }
+variable "github_repo_token" {
+  type        = string
+  description = "The file path on the local machine containing a read/write GitHub repository token"
+}
+
 # GCP Settings
 variable "sa_creds" {
   type        = string
   description = "The Service Account json file path on local machine"
 }
 variable "k10_sa_creds" {
-  type = string
+  type        = string
   description = "The K10 GCP Service Account (with compute.storageAdmin role) file path on local machine"
 }
 variable "gcp_sa" {

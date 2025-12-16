@@ -15,7 +15,7 @@ terraform {
     }
     helm = {
       source  = "hashicorp/helm"
-      version = "~= 3.1.1"
+      version = "~> 3.1.1"
     }
     github = {
       source  = "integrations/github"
@@ -52,5 +52,6 @@ provider "helm" {
 }
 
 provider "github" {
-  token = var.github_repo_token
+  owner = var.github_owner
+  token = trimspace(file(var.github_repo_token))
 }

@@ -1,6 +1,7 @@
 # GitHub Settings
-github_repo_token = "~/.github/kasten-automation"
+github_owner      = "MichaelHaigh"
 github_repo       = "kasten-automation"
+github_repo_token = "~/.github/kasten-automation"
 
 # GCP Settings
 sa_creds           = "~/.gcp/mhaigh-terraform-1a95c215426d.json"

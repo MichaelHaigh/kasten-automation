@@ -109,6 +109,8 @@ data "kubernetes_secret" "argocd_admin_secret" {
 }
 
 resource "kubernetes_config_map_v1_data" "argocd_cm" {
+  count      = (var.argocd_deployment) ? 1 : 0
+  depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-cm"
     namespace = var.argocd_namespace
