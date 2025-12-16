@@ -5,9 +5,7 @@ metadata:
   name: pacman-backup
   namespace: kasten-io
 spec:
-  comment: ""
   frequency: "@hourly"
-  paused: false
   actions:
     - action: backup
     - action: export
