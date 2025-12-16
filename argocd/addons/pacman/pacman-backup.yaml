@@ -16,7 +16,6 @@ spec:
         profile:
           name: gcp-location-default-mhaigh
           namespace: kasten-io
-        receiveString: ""
         exportData:
           enabled: true
       retention:
