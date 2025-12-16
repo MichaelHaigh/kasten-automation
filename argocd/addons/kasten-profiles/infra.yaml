@@ -1,7 +1,8 @@
+# Auto-generated file, do not edit directly
 kind: Profile
 apiVersion: config.kio.kasten.io/v1alpha1
 metadata:
-  name: default-gcp-profile
+  name: gcp-infra-default-mhaigh
   namespace: kasten-io
 spec:
   infra:
