@@ -24,7 +24,7 @@ spec:
             type: LoadBalancer
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: argocd-setup
-      path: argocd/addons/pacman
+      path: gcp/argocd/addons/pacman
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
