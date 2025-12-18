@@ -125,7 +125,7 @@ resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/external-secrets/cluster-secret-store.yaml"
+  file                = "gcp/argocd/addons/external-secrets/cluster-secret-store.yaml"
   content             = local.cluster-secret-store
   commit_message      = "automated(${terraform.workspace}): update cluster-secret-store.yaml via 'terraform apply'"
   overwrite_on_create = true
@@ -135,7 +135,7 @@ resource "github_repository_file" "addons_kastenio_externalsecret" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/kasten-io/external-secret.yaml"
+  file                = "gcp/argocd/addons/kasten-io/external-secret.yaml"
   content             = local.external-secret
   commit_message      = "automated(${terraform.workspace}): update external-secret.yaml via 'terraform apply'"
   overwrite_on_create = true
@@ -145,7 +145,7 @@ resource "github_repository_file" "addons_kastenprofiles_infra" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/kasten-profiles/infra.yaml"
+  file                = "gcp/argocd/addons/kasten-profiles/infra.yaml"
   content             = local.infra
   commit_message      = "automated(${terraform.workspace}): update infra.yaml via 'terraform apply'"
   overwrite_on_create = true
@@ -155,7 +155,7 @@ resource "github_repository_file" "addons_kastenprofiles_location" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/kasten-profiles/location.yaml"
+  file                = "gcp/argocd/addons/kasten-profiles/location.yaml"
   content             = local.location
   commit_message      = "automated(${terraform.workspace}): update location.yaml via 'terraform apply'"
   overwrite_on_create = true
@@ -165,7 +165,7 @@ resource "github_repository_file" "addons_pacman_backup" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
   branch              = "argocd-setup" # change to main when merging to main
-  file                = "argocd/addons/pacman/pacman-backup.yaml"
+  file                = "gcp/argocd/addons/pacman/pacman-backup.yaml"
   content             = local.pacman-backup
   commit_message      = "automated(${terraform.workspace}): update pacman-backup.yaml via 'terraform apply'"
   overwrite_on_create = true

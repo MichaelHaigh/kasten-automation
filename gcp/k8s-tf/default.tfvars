@@ -40,6 +40,10 @@ authorized_networks = [
     cidr_block   = "203.0.113.30/32"
     display_name = "home_address"
   },
+  {                                  ### DO NOT COMMIT ###
+    cidr_block   = "70.130.79.30/32" ### DO NOT COMMIT ###
+    display_name = "home_address"    ### DO NOT COMMIT ###
+  },                                 ### DO NOT COMMIT ###
 ]
 
 # ArgoCD Settings
