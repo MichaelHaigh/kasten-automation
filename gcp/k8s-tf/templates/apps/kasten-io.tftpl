@@ -22,6 +22,15 @@ spec:
           auth:
             tokenAuth:
               enabled: true
+          excludedApps:
+            - gke-managed-cim
+            - gke-managed-system
+            - gke-managed-volumepopulator
+            - gmp-public
+            - gmp-system
+            - kube-node-lease
+            - kube-public
+            - kube-system
           externalGateway:
             create: true
     - repoURL: ${thisRepoURL}
