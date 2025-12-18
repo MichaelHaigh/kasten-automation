@@ -13,8 +13,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: {thisRepoURL}
-    targetRevision: {targetRevision}
+    repoURL: https://github.com/MichaelHaigh/kasten-automation.git
+    targetRevision: argocd-setup
     path: argocd/addons/kasten-profiles
   syncPolicy:
     automated:
