@@ -23,6 +23,12 @@ spec:
           auth:
             tokenAuth:
               enabled: true
+          excludedApps:
+            - gke-managed-cim
+            - gke-managed-system
+            - gke-managed-volumepopulator
+            - gmp-public
+            - gmp-system
           externalGateway:
             create: true
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
