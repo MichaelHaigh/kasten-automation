@@ -14,15 +14,15 @@ spec:
   project: default
   sources:
     - repoURL: https://michaelhaigh.github.io/pacman/
-      targetRevision: {pacman_version}
+      targetRevision: 0.1.23
       chart: pacman
       helm:
         releaseName: pacman
         valuesObject:
           service:
             type: LoadBalancer
-    - repoURL: {thisRepoURL}
-      targetRevision: {targetRevision}
+    - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
+      targetRevision: argocd-setup
       path: argocd/addons/pacman
   syncPolicy:
     syncOptions:
