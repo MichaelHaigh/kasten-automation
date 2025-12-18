@@ -1,3 +1,4 @@
+# Auto-generated file, do not edit directly
 apiVersion: config.kio.kasten.io/v1alpha1
 kind: Policy
 metadata:
