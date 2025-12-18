@@ -22,7 +22,7 @@ terraform init
 
 The provider version in each `main.tf` file is constrained by the `~>` operator to ensure code compatibility, however feel free to change to a different operator if needed. Information on required privileges for the various providers can be found in the specific hyperscaler directory ReadMe.
 
-Next, update the `default.tfvars` file to have the deployment parameters of choosing. Additional information on their meanings can be found in the `variables.tf` file.
+Next, update the `default.tfvars` file to have the deployment parameters of your choosing. Additional information on their meanings can be found in the `variables.tf` file.
 
 Plan your deployment with the following command (more information on [workspaces](#workspaces-support) in the section below):
 
