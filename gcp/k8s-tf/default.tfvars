@@ -1,6 +1,7 @@
 # GitHub Settings
 github_owner      = "MichaelHaigh"
 github_repo       = "kasten-automation"
+github_repo_url   = "https://github.com/MichaelHaigh/kasten-automation.git"
 github_repo_token = "~/.github/kasten-automation"
 
 # GCP Settings
@@ -40,13 +41,11 @@ authorized_networks = [
     cidr_block   = "203.0.113.30/32"
     display_name = "home_address"
   },
-  {                                  ### DO NOT COMMIT ###
-    cidr_block   = "70.130.79.30/32" ### DO NOT COMMIT ###
-    display_name = "home_address"    ### DO NOT COMMIT ###
-  },                                 ### DO NOT COMMIT ###
 ]
 
-# ArgoCD Settings
+# ArgoCD / Deployed Apps Settings
 argocd_deployment = true
-argocd_namespace  = "argocd"
-argocd_version    = "9.1.6"
+argocd_version    = "9.1.6"  # Only relevant if argocd_deployment is true
+eso_version       = "1.1.1"  # Only relevant if argocd_deployment is true
+kasten_version    = "8.0.14" # Only relevant if argocd_deployment is true
+pacman_version    = "0.1.23" # Only relevant if argocd_deployment is true

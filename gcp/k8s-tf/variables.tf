@@ -7,6 +7,10 @@ variable "github_repo" {
   type        = string
   description = "The name of the GitHub repository"
 }
+variable "github_repo_url" {
+  type        = string
+  description = "The HTTPS URL of the GitHub repository"
+}
 variable "github_repo_token" {
   type        = string
   description = "The file path on the local machine containing a read/write GitHub repository token"
@@ -103,16 +107,24 @@ variable "authorized_networks" {
   default     = []
 }
 
-# ArgoCD Settings
+# ArgoCD / Deployed Apps Settings
 variable "argocd_deployment" {
   type        = bool
   description = "Whether to deploy Argo CD or not"
 }
-variable "argocd_namespace" {
-  type        = string
-  description = "The namespace to deploy Argo CD into"
-}
 variable "argocd_version" {
   type        = string
   description = "The Argo CD helm version to install"
+}
+variable "eso_version" {
+  type        = string
+  description = "The External Secrets Operator version to install"
+}
+variable "kasten_version" {
+  type        = string
+  description = "The Kasten.io version to install"
+}
+variable "pacman_version" {
+  type        = string
+  description = "The Pacman app version to install"
 }

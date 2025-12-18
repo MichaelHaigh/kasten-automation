@@ -67,7 +67,7 @@ resource "helm_release" "argocd" {
   repository       = "https://argoproj.github.io/argo-helm"
   chart            = "argo-cd"
   version          = var.argocd_version
-  namespace        = var.argocd_namespace
+  namespace        = "argocd"
   create_namespace = true
 
   set = [
@@ -95,7 +95,7 @@ data "kubernetes_service" "argocd_server" {
   depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-server"
-    namespace = var.argocd_namespace
+    namespace = "argocd"
   }
 }
 
@@ -104,7 +104,7 @@ data "kubernetes_secret" "argocd_admin_secret" {
   depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-initial-admin-secret"
-    namespace = var.argocd_namespace
+    namespace = "argocd"
   }
 }
 
@@ -113,7 +113,7 @@ resource "kubernetes_config_map_v1_data" "argocd_cm" {
   depends_on = [time_sleep.wait_for_argocd]
   metadata {
     name      = "argocd-cm"
-    namespace = var.argocd_namespace
+    namespace = "argocd"
   }
   data = {
     "resource.customizations.health.argoproj.io_Application" = <<-EOT

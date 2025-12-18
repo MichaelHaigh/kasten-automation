@@ -14,7 +14,7 @@ spec:
   project: default
   sources:
     - repoURL: https://charts.kasten.io/
-      targetRevision: 8.0.14
+      targetRevision: {kasten_version}
       chart: k10
       helm:
         releaseName: k10
@@ -24,8 +24,8 @@ spec:
               enabled: true
           externalGateway:
             create: true
-    - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
-      targetRevision: argocd-setup # change to main when merging to main
+    - repoURL: {thisRepoURL}
+      targetRevision: {targetRevision}
       path: argocd/addons/kasten-io
   syncPolicy:
     syncOptions:

@@ -1,172 +1,128 @@
-# Update the various addons YAML here, not argocd/addons directory
+# Update the application and addons YAML within templates/ directory, not ../argocd/addons directory
 locals {
-  cluster-secret-store = <<YAML
-# Auto-generated file, do not edit directly
-apiVersion: external-secrets.io/v1
-kind: ClusterSecretStore
-metadata:
-  name: cloud-cluster-secret-store
-spec:
-  provider:
-    gcpsm:
-      auth:
-        secretRef:
-          secretAccessKeySecretRef:
-            name: external-secrets-operator-secret
-            key: secret-access-credentials
-            namespace: kube-system
-      projectID: ${var.gcp_project}
-YAML
-  external-secret      = <<YAML
-# Auto-generated file, do not edit directly
-apiVersion: external-secrets.io/v1
-kind: ExternalSecret
-metadata:
-  name: k10-sa-key
-  namespace: kasten-io
-spec:
-  secretStoreRef:
-    name: cloud-cluster-secret-store
-    kind: ClusterSecretStore
-  target:
-    name: k10secret-gcp-sa-key
-    creationPolicy: Owner
-  data:
-  - secretKey: project-id
-    remoteRef:
-      key: projectid-${terraform.workspace}-${var.creator_label}
-  - secretKey: service-account.json
-    remoteRef:
-      key: k10-sa-${terraform.workspace}-${var.creator_label}
-YAML
-  infra                = <<YAML
-# Auto-generated file, do not edit directly
-kind: Profile
-apiVersion: config.kio.kasten.io/v1alpha1
-metadata:
-  name: gcp-infra-${terraform.workspace}-${var.creator_label}
-  namespace: kasten-io
-spec:
-  infra:
-    credential:
-      secretType: GcpServiceAccountKey
-      secret:
-        apiVersion: v1
-        kind: secret
-        name: k10secret-gcp-sa-key
-        namespace: kasten-io
-    type: GCP
-  type: Infra
-YAML
-  location             = <<YAML
-# Auto-generated file, do not edit directly
-apiVersion: config.kio.kasten.io/v1alpha1
-kind: Profile
-metadata:
-  name: gcp-location-${terraform.workspace}-${var.creator_label}
-  namespace: kasten-io
-spec:
-  locationSpec:
-    credential:
-      secret:
-        apiVersion: v1
-        kind: secret
-        name: k10secret-gcp-sa-key
-        namespace: kasten-io
-      secretType: GcpServiceAccountKey
-    objectStore:
-      name: ${google_storage_bucket.backup_target.name}
-      objectStoreType: GCS
-      region: ${var.gcp_region}
-    type: ObjectStore
-  type: Location
-YAML
-  pacman-backup        = <<YAML
-# Auto-generated file, do not edit directly
-apiVersion: config.kio.kasten.io/v1alpha1
-kind: Policy
-metadata:
-  name: pacman-backup
-  namespace: kasten-io
-spec:
-  frequency: "@hourly"
-  actions:
-    - action: backup
-    - action: export
-      exportParameters:
-        frequency: "@hourly"
-        profile:
-          name: gcp-location-${terraform.workspace}-${var.creator_label}
-          namespace: kasten-io
-        exportData:
-          enabled: true
-      retention:
-        hourly: 24
-        daily: 7
-        weekly: 4
-        monthly: 12
-        yearly: 7
-  retention:
-    hourly: 24
-    daily: 7
-    weekly: 4
-    monthly: 12
-    yearly: 7
-  selector:
-    matchExpressions:
-      - key: k10.kasten.io/appNamespace
-        operator: In
-        values:
-          - pacman
-YAML
+  addons-cluster-secret-store = templatefile("${path.module}/templates/addons/external-secrets/cluster-secret-store.tftpl", {
+    gcp_project = var.gcp_project
+  })
+  addons-external-secret = templatefile("${path.module}/templates/addons/kasten-io/external-secret.tftpl", {
+    creator_label = var.creator_label
+    workspace     = terraform.workspace
+  })
+  addons-infra = templatefile("${path.module}/templates/addons/kasten-profiles/infra.tftpl", {
+    creator_label = var.creator_label
+    workspace     = terraform.workspace
+  })
+  addons-location = templatefile("${path.module}/templates/addons/kasten-profiles/location.tftpl", {
+    bucket        = google_storage_bucket.backup_target.name
+    creator_label = var.creator_label
+    region        = var.gcp_region
+    workspace     = terraform.workspace
+  })
+  addons-pacman-backup = templatefile("${path.module}/templates/addons/pacman/pacman-backup.tftpl", {
+    creator_label = var.creator_label
+    workspace     = terraform.workspace
+  })
+  apps-external-secrets = templatefile("${path.module}/templates/apps/external-secrets.tftpl", {
+    eso_version    = var.eso_version
+    targetRevision = terraform.workspace
+    thisRepoURL    = var.github_repo_url
+  })
+  apps-kasten-io = templatefile("${path.module}/templates/apps/kasten-io.tftpl", {
+    kasten_version = var.kasten_version
+    targetRevision = terraform.workspace
+    thisRepoURL    = var.github_repo_url
+  })
+  apps-kasten-profiles = templatefile("${path.module}/templates/apps/kasten-profiles.tftpl", {
+    targetRevision = terraform.workspace
+    thisRepoURL    = var.github_repo_url
+  })
+  apps-pacman = templatefile("${path.module}/templates/apps/pacman.tftpl", {
+    pacman_version = var.pacman_version
+    targetRevision = terraform.workspace
+    thisRepoURL    = var.github_repo_url
+  })
 }
 
+# Addons files
 resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
+  branch              = terraform.workspace
   file                = "gcp/argocd/addons/external-secrets/cluster-secret-store.yaml"
-  content             = local.cluster-secret-store
-  commit_message      = "automated(${terraform.workspace}): update cluster-secret-store.yaml via 'terraform apply'"
+  content             = local.addons-cluster-secret-store
+  commit_message      = "automated(${terraform.workspace}): update addons/external-secrets/cluster-secret-store.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
-
 resource "github_repository_file" "addons_kastenio_externalsecret" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
+  branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-io/external-secret.yaml"
-  content             = local.external-secret
-  commit_message      = "automated(${terraform.workspace}): update external-secret.yaml via 'terraform apply'"
+  content             = local.addons-external-secret
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
-
 resource "github_repository_file" "addons_kastenprofiles_infra" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
+  branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-profiles/infra.yaml"
-  content             = local.infra
-  commit_message      = "automated(${terraform.workspace}): update infra.yaml via 'terraform apply'"
+  content             = local.addons-infra
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infra.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
-
 resource "github_repository_file" "addons_kastenprofiles_location" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
+  branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-profiles/location.yaml"
-  content             = local.location
-  commit_message      = "automated(${terraform.workspace}): update location.yaml via 'terraform apply'"
+  content             = local.addons-location
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/location.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
-
 resource "github_repository_file" "addons_pacman_backup" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
-  branch              = "argocd-setup" # change to main when merging to main
+  branch              = terraform.workspace
   file                = "gcp/argocd/addons/pacman/pacman-backup.yaml"
-  content             = local.pacman-backup
-  commit_message      = "automated(${terraform.workspace}): update pacman-backup.yaml via 'terraform apply'"
+  content             = local.addons-pacman-backup
+  commit_message      = "automated(${terraform.workspace}): update addons/pacman/pacman-backup.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+
+# Apps files
+resource "github_repository_file" "apps_external_secrets" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "gcp/argocd/apps/external-secrets.yaml"
+  content             = local.apps-external-secrets
+  commit_message      = "automated(${terraform.workspace}): update apps/external-secret.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "apps_kasten_io" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "gcp/argocd/apps/kasten-io.yaml"
+  content             = local.apps-kasten-io
+  commit_message      = "automated(${terraform.workspace}): update apps/kasten-io.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "apps_kasten_profiles" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "gcp/argocd/apps/kasten-profiles.yaml"
+  content             = local.apps-kasten-profiles
+  commit_message      = "automated(${terraform.workspace}): update apps/kasten-profiles.yaml via 'terraform apply'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "apps_pacman" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "gcp/argocd/apps/pacman.yaml"
+  content             = local.apps-pacman
+  commit_message      = "automated(${terraform.workspace}): update apps/pacman.yaml via 'terraform apply'"
   overwrite_on_create = true
 }
