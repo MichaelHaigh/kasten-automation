@@ -29,6 +29,9 @@ spec:
             - gke-managed-volumepopulator
             - gmp-public
             - gmp-system
+            - kube-node-lease
+            - kube-public
+            - kube-system
           externalGateway:
             create: true
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
