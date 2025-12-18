@@ -48,8 +48,8 @@ resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/addons/external-secrets/cluster-secret-store.yaml"
-  content             = local.addons-cluster-secret-store
-  commit_message      = "automated(${terraform.workspace}): update addons/external-secrets/cluster-secret-store.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cluster-secret-store)
+  commit_message      = "automated(${terraform.workspace}): update addons/external-secrets/cluster-secret-store.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenio_externalsecret" {
@@ -57,8 +57,8 @@ resource "github_repository_file" "addons_kastenio_externalsecret" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-io/external-secret.yaml"
-  content             = local.addons-external-secret
-  commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-secret)
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenprofiles_infra" {
@@ -66,8 +66,8 @@ resource "github_repository_file" "addons_kastenprofiles_infra" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-profiles/infra.yaml"
-  content             = local.addons-infra
-  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infra.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-infra)
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infra.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenprofiles_location" {
@@ -75,8 +75,8 @@ resource "github_repository_file" "addons_kastenprofiles_location" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/addons/kasten-profiles/location.yaml"
-  content             = local.addons-location
-  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/location.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-location)
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/location.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_pacman_backup" {
@@ -84,8 +84,8 @@ resource "github_repository_file" "addons_pacman_backup" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/addons/pacman/pacman-backup.yaml"
-  content             = local.addons-pacman-backup
-  commit_message      = "automated(${terraform.workspace}): update addons/pacman/pacman-backup.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-pacman-backup)
+  commit_message      = "automated(${terraform.workspace}): update addons/pacman/pacman-backup.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 
@@ -95,8 +95,8 @@ resource "github_repository_file" "apps_external_secrets" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/apps/external-secrets.yaml"
-  content             = local.apps-external-secrets
-  commit_message      = "automated(${terraform.workspace}): update apps/external-secret.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-external-secrets)
+  commit_message      = "automated(${terraform.workspace}): update apps/external-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "apps_kasten_io" {
@@ -104,8 +104,8 @@ resource "github_repository_file" "apps_kasten_io" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/apps/kasten-io.yaml"
-  content             = local.apps-kasten-io
-  commit_message      = "automated(${terraform.workspace}): update apps/kasten-io.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-io)
+  commit_message      = "automated(${terraform.workspace}): update apps/kasten-io.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "apps_kasten_profiles" {
@@ -113,8 +113,8 @@ resource "github_repository_file" "apps_kasten_profiles" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/apps/kasten-profiles.yaml"
-  content             = local.apps-kasten-profiles
-  commit_message      = "automated(${terraform.workspace}): update apps/kasten-profiles.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-profiles)
+  commit_message      = "automated(${terraform.workspace}): update apps/kasten-profiles.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "apps_pacman" {
@@ -122,7 +122,7 @@ resource "github_repository_file" "apps_pacman" {
   repository          = var.github_repo
   branch              = terraform.workspace
   file                = "gcp/argocd/apps/pacman.yaml"
-  content             = local.apps-pacman
-  commit_message      = "automated(${terraform.workspace}): update apps/pacman.yaml via 'terraform apply'"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-pacman)
+  commit_message      = "automated(${terraform.workspace}): update apps/pacman.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }

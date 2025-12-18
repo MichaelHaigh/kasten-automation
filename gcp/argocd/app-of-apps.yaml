@@ -8,7 +8,7 @@ spec:
     namespace: argocd
     server: https://kubernetes.default.svc
   source:
-    path: argocd/apps
+    path: gcp/argocd/apps
     repoURL: https://github.com/MichaelHaigh/kasten-automation
     targetRevision: argocd-setup # change to main when merging to main
     directory:

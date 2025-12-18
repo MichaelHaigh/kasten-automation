@@ -4,7 +4,7 @@ output "_1_cloud_kubeconfig_cmd" {
 }
 output "_2_argocd_apply_app_of_apps_cmd" {
   description = "The command to run to deploy the app of apps yaml"
-  value       = var.argocd_deployment ? "kubectl apply -f ../../argocd/app-of-apps.yaml" : "ArgoCD not deployed"
+  value       = var.argocd_deployment ? "kubectl apply -f ../argocd/app-of-apps.yaml" : "ArgoCD not deployed"
 }
 output "_3_argocd_endpoint" {
   description = "The URL to access the ArgoCD UI"

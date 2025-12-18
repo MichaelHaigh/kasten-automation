@@ -1,6 +1,6 @@
 resource "google_secret_manager_secret" "k10_sa_creds" {
   count     = (var.argocd_deployment) ? 1 : 0
-  secret_id = "k10-sa-${terraform.workspace}-${var.creator_label}"
+  secret_id = "${var.creator_label}-${terraform.workspace}-k10-sa"
 
   labels = {
     creator    = var.creator_label
@@ -22,7 +22,7 @@ resource "google_secret_manager_secret_version" "k10_sa_creds_version" {
 
 resource "google_secret_manager_secret" "gcp_project" {
   count     = (var.argocd_deployment) ? 1 : 0
-  secret_id = "projectid-${terraform.workspace}-${var.creator_label}"
+  secret_id = "${var.creator_label}-${terraform.workspace}-projectid"
 
   labels = {
     creator    = var.creator_label

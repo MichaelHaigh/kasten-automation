@@ -14,16 +14,16 @@ spec:
   project: default
   sources:
     - repoURL: https://michaelhaigh.github.io/pacman/
-      targetRevision: {pacman_version}
+      targetRevision: ${pacman_version}
       chart: pacman
       helm:
         releaseName: pacman
         valuesObject:
           service:
             type: LoadBalancer
-    - repoURL: {thisRepoURL}
-      targetRevision: {targetRevision}
-      path: argocd/addons/pacman
+    - repoURL: ${thisRepoURL}
+      targetRevision: ${targetRevision}
+      path: gcp/argocd/addons/pacman
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

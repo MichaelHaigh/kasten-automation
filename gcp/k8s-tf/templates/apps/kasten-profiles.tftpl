@@ -13,9 +13,9 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: {thisRepoURL}
-    targetRevision: {targetRevision}
-    path: argocd/addons/kasten-profiles
+    repoURL: ${thisRepoURL}
+    targetRevision: ${targetRevision}
+    path: gcp/argocd/addons/kasten-profiles
   syncPolicy:
     automated:
       prune: true
