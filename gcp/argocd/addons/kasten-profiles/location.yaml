@@ -13,7 +13,7 @@ spec:
         namespace: kasten-io
       secretType: GcpServiceAccountKey
     objectStore:
-      name: k10-argocd-setup-mhaigh
+      name: mhaigh-argocd-setup-k10
       objectStoreType: GCS
       region: us-central1
     type: ObjectStore
