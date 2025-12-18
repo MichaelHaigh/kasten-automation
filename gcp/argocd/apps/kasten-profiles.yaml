@@ -16,7 +16,7 @@ spec:
   source:
     repoURL: https://github.com/MichaelHaigh/kasten-automation.git
     targetRevision: argocd-setup
-    path: argocd/addons/kasten-profiles
+    path: gcp/argocd/addons/kasten-profiles
   syncPolicy:
     automated:
       prune: true
