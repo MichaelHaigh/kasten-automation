@@ -5,7 +5,7 @@ github_repo_url   = "https://github.com/MichaelHaigh/kasten-automation.git"
 github_repo_token = "~/.github/kasten-automation"
 
 # Azure Settings
-azr_creds   = "~/.azure/tf-subscription.json"
+azr_creds   = "~/.azure/tf-azure.json"
 azr_region  = "eastus"
 creator_tag = "mhaigh"
 

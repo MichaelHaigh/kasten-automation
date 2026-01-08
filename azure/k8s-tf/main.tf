@@ -29,7 +29,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
 
   subscription_id = jsondecode(file(var.azr_creds)).subscription_id
 }
@@ -58,4 +62,9 @@ provider "helm" {
     client_key             = base64decode(azurerm_kubernetes_cluster.aks_cluster.kube_config.0.client_key)
     cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.aks_cluster.kube_config.0.cluster_ca_certificate)
   }
+}
+
+provider "github" {
+  owner = var.github_owner
+  token = trimspace(file(var.github_repo_token))
 }

@@ -15,6 +15,8 @@ resource "azurerm_subnet" "aks_node_subnet" {
   resource_group_name  = azurerm_resource_group.aks_resource_group.name
   virtual_network_name = azurerm_virtual_network.aks_vnet.name
   address_prefixes     = [var.aks_nodepool_cidr]
+
+  service_endpoints = ["Microsoft.KeyVault", "Microsoft.Storage"]
 }
 
 resource "azurerm_network_security_group" "aks_nsg" {

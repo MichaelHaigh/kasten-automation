@@ -1,45 +1,36 @@
 # Update the application and addons YAML within templates/ directory, not ../argocd/addons directory
 locals {
-  /*
   addons-cluster-secret-store = templatefile("${path.module}/templates/addons/external-secrets/cluster-secret-store.tftpl", {
-    gcp_project = var.gcp_project
+    client_id = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].client_id
+    vault_url = azurerm_key_vault.kasten_key_vault.vault_uri
   })
   addons-external-secret = templatefile("${path.module}/templates/addons/kasten-io/external-secret.tftpl", {
-    creator_label = var.creator_label
-    workspace     = terraform.workspace
-  })
-  addons-infra = templatefile("${path.module}/templates/addons/kasten-profiles/infra.tftpl", {
-    creator_label = var.creator_label
-    workspace     = terraform.workspace
+    creator   = var.creator_tag
+    workspace = terraform.workspace
   })
   addons-location = templatefile("${path.module}/templates/addons/kasten-profiles/location.tftpl", {
-    bucket        = google_storage_bucket.backup_target.name
-    creator_label = var.creator_label
-    region        = var.gcp_region
-    workspace     = terraform.workspace
+    container = azurerm_storage_container.container.name
+    creator   = var.creator_tag
+    workspace = terraform.workspace
   })
   addons-pacman-backup = templatefile("${path.module}/templates/addons/pacman/pacman-backup.tftpl", {
-    creator_label = var.creator_label
-    workspace     = terraform.workspace
+    creator   = var.creator_tag
+    workspace = terraform.workspace
   })
-  */
   app-of-apps = templatefile("${path.module}/templates/app-of-apps.tftpl", {
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
-  /*
   apps-external-secrets = templatefile("${path.module}/templates/apps/external-secrets.tftpl", {
     eso_version    = var.eso_version
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
-  */
   apps-kasten-io = templatefile("${path.module}/templates/apps/kasten-io.tftpl", {
     kasten_version = var.kasten_version
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
-  /*
   apps-kasten-profiles = templatefile("${path.module}/templates/apps/kasten-profiles.tftpl", {
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
@@ -49,11 +40,9 @@ locals {
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
-  */
 }
 
 # Addons files
-/*
 resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
@@ -70,15 +59,6 @@ resource "github_repository_file" "addons_kastenio_externalsecret" {
   file                = "azure/argocd/addons/kasten-io/external-secret.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply/destroy'"
-  overwrite_on_create = true
-}
-resource "github_repository_file" "addons_kastenprofiles_infra" {
-  count               = (var.argocd_deployment) ? 1 : 0
-  repository          = var.github_repo
-  branch              = terraform.workspace
-  file                = "azure/argocd/addons/kasten-profiles/infra.yaml"
-  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-infra)
-  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infra.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenprofiles_location" {
@@ -99,7 +79,6 @@ resource "github_repository_file" "addons_pacman_backup" {
   commit_message      = "automated(${terraform.workspace}): update addons/pacman/pacman-backup.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
-*/
 
 # Apps files
 resource "github_repository_file" "app_of_apps" {
@@ -111,7 +90,6 @@ resource "github_repository_file" "app_of_apps" {
   commit_message      = "automated(${terraform.workspace}): update app-of-apps.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
-/*
 resource "github_repository_file" "apps_external_secrets" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
@@ -121,7 +99,6 @@ resource "github_repository_file" "apps_external_secrets" {
   commit_message      = "automated(${terraform.workspace}): update apps/external-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
-*/
 resource "github_repository_file" "apps_kasten_io" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
@@ -131,7 +108,6 @@ resource "github_repository_file" "apps_kasten_io" {
   commit_message      = "automated(${terraform.workspace}): update apps/kasten-io.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
-/*
 resource "github_repository_file" "apps_kasten_profiles" {
   count               = (var.argocd_deployment) ? 1 : 0
   repository          = var.github_repo
@@ -150,4 +126,3 @@ resource "github_repository_file" "apps_pacman" {
   commit_message      = "automated(${terraform.workspace}): update apps/pacman.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
-*/

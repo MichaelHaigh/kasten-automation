@@ -5,7 +5,7 @@ github_repo_url   = "https://github.com/MichaelHaigh/kasten-automation.git"
 github_repo_token = "~/.github/kasten-automation"
 
 # Azure Settings
-azr_creds   = "~/.azure/tf-subscription.json"
+azr_creds   = "~/.azure/tf-azure.json"
 azr_region  = "eastus"
 creator_tag = "mhaigh"
 
@@ -34,10 +34,6 @@ authorized_networks = [
     cidr_block   = "203.0.113.30/32"
     display_name = "home_address"
   },
-  {                                  ### DO NOT COMMIT ###
-    cidr_block   = "70.130.79.30/32" ### DO NOT COMMIT ###
-    display_name = "home_address"    ### DO NOT COMMIT ###
-  },                                 ### DO NOT COMMIT ###
 ]
 
 # ArgoCD / Deployed Apps Settings
