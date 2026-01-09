@@ -31,8 +31,6 @@ There are two main credentials which are required:
   * Optionally (but recommended) constrained to your `kasten-automation` repository
   * **Read** access to metadata
   * **Read** and **Write** access to code
-* `k10_sa_creds`: a local file to the [service account credential](https://cloud.google.com/iam/docs/service-account-creds#key-types) which is [used by Kasten](https://docs.kasten.io/latest/install/google/google#using-a-separate-gcp-service-account) to manage `volumesnapshot` in the GCP account, with the `compute.storageAdmin` permission
-
 
 ## Other Settings
 
