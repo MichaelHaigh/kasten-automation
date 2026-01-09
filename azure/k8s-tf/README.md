@@ -14,8 +14,6 @@ Please see the [main readme](../../README.md) for information on how to deploy.
 
 ## Credentials
 
-# the [service account credential](https://cloud.google.com/iam/docs/service-account-creds#key-types) which is used to deploy Terraform resources with the following permissions:
-
 There are two main credentials which are required:
 
 * `azr_creds`: this code makes use of [managed service identity](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/guides/managed_service_identity) for authentication (run `az login` in your terminal), however a few IDs are required to be provided. This variable should point to a local JSON file with the following format:
@@ -28,7 +26,7 @@ There are two main credentials which are required:
     ```
   * `subscription_id`: the Azure [subscription ID](https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-azure-subscription) used to deploy resources (run `az account show --query id --output tsv`)
   * `tentant_id`: the Azure [tentant ID](https://learn.microsoft.com/en-us/azure/azure-portal/get-subscription-tenant-id#find-your-microsoft-entra-tenant) (run `az account show --query tenantId --output tsv`)
-  * `user_id`: the ID of the currently logged in user (run ``az ad user show --id `az account show --query user.name --output tsv` --query id --output tsv``
+  * `user_id`: the ID of the currently logged in user (run ``az ad user show --id `az account show --query user.name --output tsv` --query id --output tsv``)
 * `github_repo_token`: a local file which contains a [fine-grained token](https://github.blog/security/application-security/introducing-fine-grained-personal-access-tokens-for-github/) for your GitHub account:
   * Optionally (but recommended) constrained to your `kasten-automation` repository
   * **Read** access to metadata
@@ -55,7 +53,7 @@ The bottom of the `tfvars` file contains an `authorized_networks` list which per
 Once Terraform has finished deploying, there will be several output variables displayed, for example:
 
 ```text
-_1_cloud_kubeconfig_cmd = "az aks get-credentials --resource-group aks-azure-rg --name mhaigh-azure-aks"
+_1_cloud_kubeconfig_cmd = "az aks get-credentials --resource-group aks-uscentral-rg --name mhaigh-uscentral-aks"
 _2_argocd_apply_app_of_apps_cmd = "kubectl apply -f ../argocd/app-of-apps.yaml"
 _3_argocd_endpoint = "https://48.216.165.54"
 _4_argocd_admin_secret_copy_cmd = "terraform output -raw argocd_admin_secret | pbcopy"

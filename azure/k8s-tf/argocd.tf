@@ -1,69 +1,8 @@
-/*
-resource "google_secret_manager_secret" "k10_sa_creds" {
-  count     = (var.argocd_deployment) ? 1 : 0
-  secret_id = "${var.creator_tag}-${terraform.workspace}-k10-sa"
-
-  labels = {
-    creator    = var.creator_tag
-    managed_by = "terraform"
-    workspace  = terraform.workspace
-  }
-
-  replication {
-    auto {}
-  }
-}
-resource "google_secret_manager_secret_version" "k10_sa_creds_version" {
-  count  = (var.argocd_deployment) ? 1 : 0
-  secret = google_secret_manager_secret.k10_sa_creds[0].id
-
-  is_secret_data_base64 = true
-  secret_data           = filebase64(var.k10_sa_creds)
-}
-
-resource "google_secret_manager_secret" "gcp_project" {
-  count     = (var.argocd_deployment) ? 1 : 0
-  secret_id = "${var.creator_tag}-${terraform.workspace}-projectid"
-
-  labels = {
-    creator    = var.creator_tag
-    managed_by = "terraform"
-    workspace  = terraform.workspace
-  }
-
-  replication {
-    auto {}
-  }
-}
-resource "google_secret_manager_secret_version" "gcp_project_version" {
-  count  = (var.argocd_deployment) ? 1 : 0
-  secret = google_secret_manager_secret.gcp_project[0].id
-
-  secret_data = var.gcp_project
-}
-*/
-
 resource "time_sleep" "wait_for_aks" {
   count           = (var.argocd_deployment) ? 1 : 0
   depends_on      = [azurerm_kubernetes_cluster.aks_cluster]
   create_duration = "2m"
 }
-
-/*
-resource "kubernetes_secret" "external_secrets_operator" {
-  count      = (var.argocd_deployment) ? 1 : 0
-  depends_on = [time_sleep.wait_for_gke]
-
-  metadata {
-    name      = "external-secrets-operator-secret"
-    namespace = "kube-system"
-  }
-
-  data = {
-    "secret-access-credentials" = file(var.sa_creds)
-  }
-}
-*/
 
 resource "helm_release" "argocd" {
   count            = (var.argocd_deployment) ? 1 : 0
