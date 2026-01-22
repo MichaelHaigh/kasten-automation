@@ -12,4 +12,8 @@ spec:
       resourceGroup: aks-eastus-rg
       cloudEnv: AzurePublicCloud
       useDefaultMSI: true
+    credential:
+      secretType: azure
+      secret:
+        name: k10-azure-secret
   type: Infra
