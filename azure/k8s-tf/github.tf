@@ -8,6 +8,12 @@ locals {
     creator   = var.creator_tag
     workspace = terraform.workspace
   })
+  addons-infrastructure = templatefile("${path.module}/templates/addons/kasten-profiles/infrastructure.tftpl", {
+    creator        = var.creator_tag
+    resourceGroup  = azurerm_resource_group.aks_resource_group.name
+    subscriptionID = jsondecode(file(var.azr_creds)).subscription_id
+    workspace      = terraform.workspace
+  })
   addons-location = templatefile("${path.module}/templates/addons/kasten-profiles/location.tftpl", {
     container = azurerm_storage_container.container.name
     creator   = var.creator_tag
@@ -59,6 +65,15 @@ resource "github_repository_file" "addons_kastenio_externalsecret" {
   file                = "azure/argocd/addons/kasten-io/external-secret.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply/destroy'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "addons_kastenprofiles_infrastructure" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "azure/argocd/addons/kasten-profiles/infrastructure.yaml"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-infrastructure)
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infrastructure.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenprofiles_location" {
