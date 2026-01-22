@@ -15,5 +15,8 @@ spec:
     credential:
       secretType: azure
       secret:
+        apiVersion: v1
+        kind: Secret
         name: k10-azure-secret
+        namespace: kasten-io
   type: Infra
