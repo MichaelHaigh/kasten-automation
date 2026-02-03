@@ -15,7 +15,7 @@ spec:
   project: default
   sources:
     - repoURL: https://michaelhaigh.github.io/pacman/
-      targetRevision: 0.1.24
+      targetRevision: 0.1.26
       chart: pacman
       helm:
         releaseName: pacman
