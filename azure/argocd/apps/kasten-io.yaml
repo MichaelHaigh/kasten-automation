@@ -15,7 +15,7 @@ spec:
   project: default
   sources:
     - repoURL: https://charts.kasten.io/
-      targetRevision: 8.0.15
+      targetRevision: 8.5.1
       chart: k10
       helm:
         releaseName: k10
