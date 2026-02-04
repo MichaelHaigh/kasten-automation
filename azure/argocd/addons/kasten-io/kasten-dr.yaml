@@ -10,14 +10,14 @@ spec:
     backupParameters:
       filters: {}
       profile:
-        name: mhaigh-eastus-azure-infra
+        name: mhaigh-eastus-azure-location
         namespace: kasten-io
   - action: export
     exportParameters:
       exportData:
         enabled: true
       profile:
-        name: mhaigh-eastus-azure-infra
+        name: mhaigh-eastus-azure-location
         namespace: kasten-io
   frequency: '@daily'
   kdrSnapshotConfiguration:
