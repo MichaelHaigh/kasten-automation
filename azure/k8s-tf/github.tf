@@ -41,7 +41,6 @@ locals {
     thisRepoURL    = var.github_repo_url
   })
   apps-kasten-io = templatefile("${path.module}/templates/apps/kasten-io.tftpl", {
-    client_id      = azurerm_kubernetes_cluster.aks_cluster.kubelet_identity[0].client_id
     kasten_version = var.kasten_version
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
