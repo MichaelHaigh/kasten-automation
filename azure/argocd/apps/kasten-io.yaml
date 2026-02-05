@@ -30,7 +30,7 @@ spec:
           externalGateway:
             create: true
           secrets:
-            azureClientId: 77b365d1-4729-4ec1-8b6e-a78399febe9f
+            azureClientId: "77b365d1-4729-4ec1-8b6e-a78399febe9f"
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: eastus
       path: azure/argocd/addons/kasten-io
