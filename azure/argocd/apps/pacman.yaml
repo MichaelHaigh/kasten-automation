@@ -25,6 +25,13 @@ spec:
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: eastus
       path: azure/argocd/addons/pacman
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: pacman-mongodb
+      namespace: pacman
+      jsonPointers:
+        - /data
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
