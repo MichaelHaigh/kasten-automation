@@ -6,6 +6,13 @@ metadata:
   namespace: kasten-io
 spec:
   locationSpec:
+    credential:
+      secretType: AwsIamRole
+      secret:
+        apiVersion: v1
+        kind: Secret
+        name: k10-aws-iam-role
+        namespace: kasten-io
     objectStore:
       name: mhaigh-aws-k10
       objectStoreType: S3
