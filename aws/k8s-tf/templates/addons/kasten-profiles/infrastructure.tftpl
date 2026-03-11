@@ -1,0 +1,9 @@
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Profile
+metadata:
+  name: ${creator}-${workspace}-aws-infra
+  namespace: kasten-io
+spec:
+  infra:
+    type: AWS
+  type: Infra

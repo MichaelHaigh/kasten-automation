@@ -1,3 +1,25 @@
+# Cleanup Kubernetes LoadBalancer services before destroying VPC infrastructure
+resource "null_resource" "k8s_cleanup" {
+  triggers = {
+    cluster_name = aws_eks_cluster.eks_cluster.name
+    region       = var.aws_region
+  }
+
+  depends_on = [
+    aws_eks_cluster.eks_cluster,
+    aws_eks_node_group.eks_ng
+  ]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<-EOT
+      aws eks update-kubeconfig --name ${self.triggers.cluster_name} --region ${self.triggers.region} &&
+      kubectl delete svc --all-namespaces --field-selector spec.type=LoadBalancer &&
+      sleep 60 || true
+    EOT
+  }
+}
+
 # EKS Cluster
 resource "aws_eks_cluster" "eks_cluster" {
   name     = "${var.creator_tag}-${terraform.workspace}-cluster"
@@ -164,13 +186,15 @@ resource "aws_security_group_rule" "eks_nodes_cluster_inbound" {
 
 # ADD-ONS
 resource "aws_eks_addon" "addons" {
+  depends_on    = [aws_eks_node_group.eks_ng]
   for_each      = { for addon in var.eks_addons : addon.name => addon }
   cluster_name  = aws_eks_cluster.eks_cluster.id
   addon_name    = each.value.name
   addon_version = each.value.version
   service_account_role_arn = (each.value.name == "aws-ebs-csi-driver" ? aws_iam_role.eks_ebs_csi.arn :
     (each.value.name == "aws-efs-csi-driver" ? aws_iam_role.eks_efs_csi.arn :
-  aws_iam_role.eks_node.arn))
+      (each.value.name == "vpc-cni" ? aws_iam_role.eks_vpc_cni.arn :
+  aws_iam_role.eks_node.arn)))
 
   tags = {
     Env     = "${var.creator_tag}-${terraform.workspace}",
@@ -178,6 +202,27 @@ resource "aws_eks_addon" "addons" {
     Creator = "${var.creator_tag}"
   }
 }
+# EBS CSI Storage Class
+resource "kubernetes_storage_class_v1" "ebs_csi" {
+  depends_on = [aws_eks_addon.addons]
+
+  metadata {
+    name = "ebs-csi"
+    annotations = {
+      "storageclass.kubernetes.io/is-default-class" = "true"
+    }
+  }
+
+  storage_provisioner    = "ebs.csi.aws.com"
+  volume_binding_mode    = "WaitForFirstConsumer"
+  reclaim_policy         = "Delete"
+  allow_volume_expansion = true
+
+  parameters = {
+    type = "gp3"
+  }
+}
+
 data "external" "thumbprint" {
   program = [format("%s/scripts/get_thumbprint.sh", path.module), var.aws_region]
 }

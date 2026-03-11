@@ -60,6 +60,35 @@ resource "aws_iam_role_policy_attachment" "node_AmazonEKSVPCResourceController" 
   role       = aws_iam_role.eks_node.name
 }
 
+# EKS VPC-CNI IAM Role (IRSA)
+resource "aws_iam_role" "eks_vpc_cni" {
+  name = "${var.creator_tag}-${terraform.workspace}-vpc-cni-role"
+
+  assume_role_policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Principal" : {
+          "Federated" : aws_iam_openid_connect_provider.cluster.arn
+        },
+        "Action" : "sts:AssumeRoleWithWebIdentity",
+        "Condition" : {
+          "StringEquals" : {
+            format("oidc.eks.${var.aws_region}.amazonaws.com/id/%s:aud", split("/", aws_iam_openid_connect_provider.cluster.arn)[3]) : "sts.amazonaws.com",
+            format("oidc.eks.${var.aws_region}.amazonaws.com/id/%s:sub", split("/", aws_iam_openid_connect_provider.cluster.arn)[3]) : "system:serviceaccount:kube-system:aws-node"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonEKS_CNI_Policy_IRSA" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+  role       = aws_iam_role.eks_vpc_cni.name
+}
+
 # EKS EBS-CSI IAM Role
 resource "aws_iam_role" "eks_ebs_csi" {
   name = "${var.creator_tag}-${terraform.workspace}-ebs-csi-role"
