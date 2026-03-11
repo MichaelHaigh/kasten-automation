@@ -1,0 +1,10 @@
+# Auto-generated file, do not edit directly
+apiVersion: config.kio.kasten.io/v1alpha1
+kind: Profile
+metadata:
+  name: mhaigh-aws-aws-infra
+  namespace: kasten-io
+spec:
+  infra:
+    type: AWS
+  type: Infra
