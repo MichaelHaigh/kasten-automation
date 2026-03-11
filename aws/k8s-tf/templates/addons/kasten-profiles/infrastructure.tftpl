@@ -6,4 +6,11 @@ metadata:
 spec:
   infra:
     type: AWS
+    credential:
+      secretType: AwsAccessKey
+      secret:
+        apiVersion: v1
+        kind: Secret
+        name: k10-aws-credential
+        namespace: kasten-io
   type: Infra

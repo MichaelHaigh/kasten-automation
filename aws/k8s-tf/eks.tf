@@ -96,10 +96,10 @@ resource "aws_eks_node_group" "eks_ng" {
   capacity_type  = "ON_DEMAND"
   instance_types = [var.eks_instance_type]
 
-  #launch_template {
-  #  name    = aws_launch_template.eks_ng_lt.name
-  #  version = aws_launch_template.eks_ng_lt.latest_version
-  #}
+  launch_template {
+    id      = aws_launch_template.eks_ng.id
+    version = aws_launch_template.eks_ng.latest_version
+  }
 
   tags = {
     Env     = "${var.creator_tag}-${terraform.workspace}",
@@ -116,30 +116,26 @@ resource "aws_eks_node_group" "eks_ng" {
   ]
 }
 
-/*
-# User data / launch template for node group
-resource "aws_launch_template" "eks_ng_lt" {
-  name      = "${terraform.workspace}-launch-template"
-  user_data = data.cloudinit_config.cloudinit.rendered
+# EKS Node Launch Template
+resource "aws_launch_template" "eks_ng" {
+  name = "${var.creator_tag}-${terraform.workspace}-node-lt"
+
   block_device_mappings {
     device_name = "/dev/xvda"
+
     ebs {
       volume_size           = var.eks_node_volume_size
-      volume_type           = "gp2"
+      volume_type           = "gp3"
       delete_on_termination = true
     }
   }
-}
-data "cloudinit_config" "cloudinit" {
-  gzip          = false
-  base64_encode = true
 
-  part {
-    content_type = "text/x-shellscript"
-    content      = file("scripts/iscsi.sh")
+  tags = {
+    Env     = "${var.creator_tag}-${terraform.workspace}",
+    Name    = "${var.creator_tag}-${terraform.workspace}-node-lt"
+    Creator = "${var.creator_tag}"
   }
 }
-*/
 
 # EKS Node Security Group
 resource "aws_security_group" "eks_nodes_sg" {

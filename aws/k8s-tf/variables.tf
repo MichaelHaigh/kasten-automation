@@ -33,11 +33,6 @@ variable "creator_tag" {
   type        = string
   description = "The value to apply to the 'creator' key tag"
 }
-variable "email" {
-  type        = string
-  description = "The email address of the creator"
-}
-
 # VPC Settings
 variable "eks_vpc_cidr" {
   type        = string
@@ -118,8 +113,3 @@ variable "snapshot_controller_version" {
   description = "The Piraeus snapshot-controller Helm chart version to install"
 }
 
-# Outputs
-variable "vscrd_release" {
-  type        = string
-  description = "The volume snapshot CRDs github release URL"
-}

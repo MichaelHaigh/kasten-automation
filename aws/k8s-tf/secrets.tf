@@ -1,7 +1,6 @@
 # AWS Secrets Manager secrets for External Secrets Operator (ESO) integration
-# Equivalent to Azure Key Vault (secrets.tf) and GCP Secret Manager (argocd.tf)
 
-# S3 bucket name (equivalent to Azure's azure-storage-account-id)
+# S3 bucket name
 resource "aws_secretsmanager_secret" "s3_bucket_name" {
   name                    = "${var.creator_tag}-${terraform.workspace}-s3-bucket-name"
   recovery_window_in_days = 0
@@ -75,8 +74,40 @@ resource "aws_secretsmanager_secret_version" "kasten_dr_source" {
   secret_string = "aws"
 }
 
+# Kasten IAM access keys
+resource "aws_secretsmanager_secret" "kasten_access_key_id" {
+  name                    = "${var.creator_tag}-${terraform.workspace}-kasten-access-key-id"
+  recovery_window_in_days = 0
+
+  tags = {
+    Env     = "${var.creator_tag}-${terraform.workspace}"
+    Name    = "${var.creator_tag}-${terraform.workspace}-kasten-access-key-id"
+    Creator = "${var.creator_tag}"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "kasten_access_key_id" {
+  secret_id     = aws_secretsmanager_secret.kasten_access_key_id.id
+  secret_string = aws_iam_access_key.eks_kasten.id
+}
+
+resource "aws_secretsmanager_secret" "kasten_secret_access_key" {
+  name                    = "${var.creator_tag}-${terraform.workspace}-kasten-secret-access-key"
+  recovery_window_in_days = 0
+
+  tags = {
+    Env     = "${var.creator_tag}-${terraform.workspace}"
+    Name    = "${var.creator_tag}-${terraform.workspace}-kasten-secret-access-key"
+    Creator = "${var.creator_tag}"
+  }
+}
+
+resource "aws_secretsmanager_secret_version" "kasten_secret_access_key" {
+  secret_id     = aws_secretsmanager_secret.kasten_secret_access_key.id
+  secret_string = aws_iam_access_key.eks_kasten.secret
+}
+
 # ESO IAM Role (IRSA) for reading from Secrets Manager
-# Equivalent to Azure's kubelet_vault_assignment / GCP's kubernetes_secret for ESO
 resource "aws_iam_role" "eks_eso" {
   name = "${var.creator_tag}-${terraform.workspace}-eso-role"
 
@@ -123,7 +154,9 @@ resource "aws_iam_policy" "eks_eso" {
           aws_secretsmanager_secret.s3_bucket_name.arn,
           aws_secretsmanager_secret.s3_bucket_region.arn,
           aws_secretsmanager_secret.kasten_dr_passphrase.arn,
-          aws_secretsmanager_secret.kasten_dr_source.arn
+          aws_secretsmanager_secret.kasten_dr_source.arn,
+          aws_secretsmanager_secret.kasten_access_key_id.arn,
+          aws_secretsmanager_secret.kasten_secret_access_key.arn
         ]
       },
       {

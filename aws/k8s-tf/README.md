@@ -5,12 +5,12 @@ This Terraform code deploys:
 * [argocd.tf](./argocd.tf): ArgoCD Helm deployment (conditional on `argocd_deployment` variable), with wait timers and health status customization.
 * [eks.tf](./eks.tf): an EKS cluster and managed node group, with most options configurable via variables.
 * [github.tf](./github.tf): template rendering and GitHub repository file commits for ArgoCD GitOps (conditional on `argocd_deployment`).
-* [iam.tf](./iam.tf): IAM roles and policies for the EKS cluster, worker nodes, EBS CSI driver, EFS CSI driver, VPC CNI, AWS Load Balancer Controller, ESO, and Kasten K10 (all using IRSA).
+* [iam.tf](./iam.tf): IAM roles and policies for the EKS cluster, worker nodes, EBS CSI driver, EFS CSI driver, VPC CNI, and AWS Load Balancer Controller (using IRSA), plus an IAM user with access keys for Kasten K10.
 * [main.tf](./main.tf): required provider versions and credential file information.
-* [s3.tf](./s3.tf): an S3 bucket which is used for application backups via Kasten.
-* [secrets.tf](./secrets.tf): AWS Secrets Manager secrets for External Secrets Operator (ESO) integration, and an ESO IRSA role for reading from Secrets Manager.
+* [s3.tf](./s3.tf): an S3 bucket which is used for application backups via Kasten, with a bucket policy restricting access to the VPC and authorized networks.
+* [secrets.tf](./secrets.tf): AWS Secrets Manager secrets for External Secrets Operator (ESO) integration (including Kasten access keys, S3 bucket info, and DR passphrase), and an ESO IRSA role for reading from Secrets Manager.
 * [variables.tf](./variables.tf): variable declarations.
-* [vpc.tf](./vpc.tf): a new VPC, public and private subnets across multiple availability zones, internet gateway, NAT gateway, and associated security groups and route tables.
+* [vpc.tf](./vpc.tf): a new VPC, public and private subnets across multiple availability zones, internet gateway, NAT gateway, VPC endpoints for S3 and Secrets Manager, and associated security groups and route tables.
 
 Please see the [main readme](../../README.md) for information on how to deploy.
 

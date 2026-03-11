@@ -9,10 +9,6 @@ terraform {
       source  = "hashicorp/external"
       version = "~> 2.3.5"
     }
-    #http = {
-    #  source = "hashicorp/http"
-    #  #version = "~> 3.4.5"
-    #}
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~> 2.38.0"
@@ -41,7 +37,6 @@ provider "aws" {
 
   access_key = jsondecode(file(var.aws_cred_file)).aws_access_key_id
   secret_key = jsondecode(file(var.aws_cred_file)).aws_secret_access_key
-  # token      = jsondecode(file(var.aws_cred_file)).aws_session_token
 }
 
 data "aws_availability_zones" "available" {

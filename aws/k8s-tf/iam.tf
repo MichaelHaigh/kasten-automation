@@ -199,39 +199,24 @@ resource "aws_iam_role_policy_attachment" "AWSLoadBalancerControllerIAMPolicy" {
   role       = aws_iam_role.eks_lb.name
 }
 
-# Kasten K10 IAM Role (IRSA)
-resource "aws_iam_role" "eks_kasten" {
-  name = "${var.creator_tag}-${terraform.workspace}-kasten-role"
-
-  assume_role_policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Effect" : "Allow",
-        "Principal" : {
-          "Federated" : aws_iam_openid_connect_provider.cluster.arn
-        },
-        "Action" : "sts:AssumeRoleWithWebIdentity",
-        "Condition" : {
-          "StringEquals" : {
-            format("oidc.eks.${var.aws_region}.amazonaws.com/id/%s:aud", split("/", aws_iam_openid_connect_provider.cluster.arn)[3]) : "sts.amazonaws.com",
-            format("oidc.eks.${var.aws_region}.amazonaws.com/id/%s:sub", split("/", aws_iam_openid_connect_provider.cluster.arn)[3]) : "system:serviceaccount:kasten-io:k10-k10"
-          }
-        }
-      }
-    ]
-  })
+# Kasten K10 IAM User
+resource "aws_iam_user" "eks_kasten" {
+  name = "${var.creator_tag}-${terraform.workspace}-kasten-user"
 
   tags = {
     Env     = "${var.creator_tag}-${terraform.workspace}"
-    Name    = "${var.creator_tag}-${terraform.workspace}-kasten-role"
+    Name    = "${var.creator_tag}-${terraform.workspace}-kasten-user"
     Creator = "${var.creator_tag}"
   }
 }
 
+resource "aws_iam_access_key" "eks_kasten" {
+  user = aws_iam_user.eks_kasten.name
+}
+
 resource "aws_iam_policy" "eks_kasten" {
   name        = "${var.creator_tag}-${terraform.workspace}-kasten-policy"
-  description = "IAM policy for Kasten K10 to access the S3 backup target bucket"
+  description = "IAM policy for Kasten K10 for S3 backups and EBS snapshot operations"
 
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -239,8 +224,54 @@ resource "aws_iam_policy" "eks_kasten" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "ec2:CopySnapshot",
+          "ec2:CreateSnapshot",
+          "ec2:CreateTags",
+          "ec2:CreateVolume",
+          "ec2:DeleteTags",
+          "ec2:DeleteVolume",
+          "ec2:DescribeSnapshotAttribute",
+          "ec2:ModifySnapshotAttribute",
+          "ec2:DescribeAvailabilityZones",
+          "ec2:DescribeRegions",
+          "ec2:DescribeSnapshots",
+          "ec2:DescribeTags",
+          "ec2:DescribeVolumeAttribute",
+          "ec2:DescribeVolumesModifications",
+          "ec2:DescribeVolumeStatus",
+          "ec2:DescribeVolumes",
+          "ebs:ListSnapshotBlocks",
+          "ebs:ListChangedBlocks",
+          "ebs:GetSnapshotBlock"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : "ec2:DeleteSnapshot",
+        "Resource" : "*",
+        "Condition" : {
+          "StringLike" : {
+            "ec2:ResourceTag/name" : "kasten__snapshot*"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : "ec2:DeleteSnapshot",
+        "Resource" : "*",
+        "Condition" : {
+          "StringLike" : {
+            "ec2:ResourceTag/Name" : "Kasten: Snapshot*"
+          }
+        }
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
           "s3:ListBucket",
-          "s3:GetBucketLocation"
+          "s3:GetBucketLocation",
+          "s3:GetBucketPolicy"
         ],
         "Resource" : aws_s3_bucket.backup_target.arn
       },
@@ -252,12 +283,19 @@ resource "aws_iam_policy" "eks_kasten" {
           "s3:DeleteObject"
         ],
         "Resource" : "${aws_s3_bucket.backup_target.arn}/*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource" : aws_secretsmanager_secret.kasten_dr_passphrase.arn
       }
     ]
   })
 }
 
-resource "aws_iam_role_policy_attachment" "KastenS3PolicyAttachment" {
+resource "aws_iam_user_policy_attachment" "KastenPolicyAttachment" {
   policy_arn = aws_iam_policy.eks_kasten.arn
-  role       = aws_iam_role.eks_kasten.name
+  user       = aws_iam_user.eks_kasten.name
 }

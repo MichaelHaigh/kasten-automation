@@ -3,6 +3,10 @@ locals {
   addons-cluster-secret-store = templatefile("${path.module}/templates/addons/external-secrets/cluster-secret-store.tftpl", {
     region = var.aws_region
   })
+  addons-aws-credential = templatefile("${path.module}/templates/addons/kasten-profiles/aws-credential.tftpl", {
+    access_key_id_secret     = aws_secretsmanager_secret.kasten_access_key_id.name
+    secret_access_key_secret = aws_secretsmanager_secret.kasten_secret_access_key.name
+  })
   addons-infrastructure = templatefile("${path.module}/templates/addons/kasten-profiles/infrastructure.tftpl", {
     creator   = var.creator_tag
     workspace = terraform.workspace
@@ -18,8 +22,9 @@ locals {
     workspace = terraform.workspace
   })
   addons-kasten-dr-secret = templatefile("${path.module}/templates/addons/kasten-dr/dr-secret.tftpl", {
-    creator   = var.creator_tag
-    workspace = terraform.workspace
+    passphrase_secret_name = aws_secretsmanager_secret.kasten_dr_passphrase.name
+    region                 = var.aws_region
+    source                 = "aws"
   })
   addons-pacman-backup = templatefile("${path.module}/templates/addons/pacman/pacman-backup.tftpl", {
     creator   = var.creator_tag
@@ -37,7 +42,6 @@ locals {
   })
   apps-kasten-io = templatefile("${path.module}/templates/apps/kasten-io.tftpl", {
     kasten_version = var.kasten_version
-    kasten_role_arn = aws_iam_role.eks_kasten.arn
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
@@ -67,6 +71,15 @@ resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   file                = "aws/argocd/addons/external-secrets/cluster-secret-store.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cluster-secret-store)
   commit_message      = "automated(${terraform.workspace}): update addons/external-secrets/cluster-secret-store.yaml via 'terraform apply/destroy'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "addons_kastenprofiles_aws_credential" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "aws/argocd/addons/kasten-profiles/aws-credential.yaml"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-aws-credential)
+  commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/aws-credential.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_kastenprofiles_infrastructure" {
