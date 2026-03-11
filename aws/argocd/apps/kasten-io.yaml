@@ -23,8 +23,6 @@ spec:
           auth:
             tokenAuth:
               enabled: true
-          secrets:
-            awsIamRole: arn:aws:iam::036776340102:role/mhaigh-aws-kasten-role
           excludedApps:
             - kube-node-lease
             - kube-public
