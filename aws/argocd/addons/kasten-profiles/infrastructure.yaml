@@ -7,4 +7,11 @@ metadata:
 spec:
   infra:
     type: AWS
+    credential:
+      secretType: AwsIamRole
+      secret:
+        apiVersion: v1
+        kind: Secret
+        name: k10-aws-iam-role
+        namespace: kasten-io
   type: Infra
