@@ -54,6 +54,9 @@ locals {
     targetRevision = terraform.workspace
     thisRepoURL    = var.github_repo_url
   })
+  apps-snapshot-controller = templatefile("${path.module}/templates/apps/snapshot-controller.tftpl", {
+    snapshot_controller_version = var.snapshot_controller_version
+  })
 }
 
 # Addons files
@@ -156,6 +159,15 @@ resource "github_repository_file" "apps_kasten_dr" {
   file                = "aws/argocd/apps/kasten-dr.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-dr)
   commit_message      = "automated(${terraform.workspace}): update apps/kasten-dr.yaml via 'terraform apply/destroy'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "apps_snapshot_controller" {
+  count               = (var.argocd_deployment) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "aws/argocd/apps/snapshot-controller.yaml"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-snapshot-controller)
+  commit_message      = "automated(${terraform.workspace}): update apps/snapshot-controller.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "apps_pacman" {

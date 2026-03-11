@@ -113,6 +113,10 @@ variable "pacman_version" {
   type        = string
   description = "The Pacman app version to install"
 }
+variable "snapshot_controller_version" {
+  type        = string
+  description = "The Piraeus snapshot-controller Helm chart version to install"
+}
 
 # Outputs
 variable "vscrd_release" {
