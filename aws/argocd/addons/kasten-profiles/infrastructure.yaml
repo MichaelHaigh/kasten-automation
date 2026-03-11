@@ -8,10 +8,10 @@ spec:
   infra:
     type: AWS
     credential:
-      secretType: AwsIamRole
+      secretType: AwsAccessKey
       secret:
         apiVersion: v1
         kind: Secret
-        name: k10-aws-iam-role
+        name: k10-aws-credential
         namespace: kasten-io
   type: Infra
