@@ -20,27 +20,35 @@ In addition to deploying Kubernetes, the Terraform IaC will optionally install A
 flowchart TD
     A[terraform apply] --> B
 
-    subgraph B[Terraform provisions infrastructure]
+    subgraph B["Terraform provisions infrastructure"]
         direction LR
-        B1[Kubernetes Cluster\nEKS / AKS / GKE]
-        B2[Networking\nVPC / VNet]
-        B3[Object Storage\nS3 / Blob / GCS]
-        B4[Secrets Store\nSM / KV / SM]
-        B5[IAM / IRSA]
+        B1["Kubernetes Cluster
+        EKS / AKS / GKE"]
+        B2["Networking
+        VPC / VNet"]
+        B3["Object Storage
+        S3 / Blob / GCS"]
+        B4["Secrets Store
+        SM / KV / SM"]
+        B5["IAM / IRSA"]
     end
 
     B --> C{argocd_deployment?}
     C -- false --> D[Done]
-    C -- true --> E[Install ArgoCD via Helm]
-    E --> F[Render templates and\ncommit manifests to GitHub]
-    F --> G[kubectl apply -f app-of-apps.yaml]
+    C -- true --> E["Install ArgoCD via Helm"]
+    E --> F["Render templates and
+    commit manifests to GitHub"]
+    F --> G["kubectl apply -f app-of-apps.yaml"]
     G --> H
 
-    subgraph H[ArgoCD syncs applications]
+    subgraph H["ArgoCD syncs applications"]
         direction LR
-        H1[External Secrets Operator\nSyncs secrets from cloud]
-        H2[Kasten K10\nProfiles + DR]
-        H3[Pacman\nKasten backup policy]
+        H1["External Secrets Operator
+        Syncs secrets from cloud"]
+        H2["Kasten K10
+        Profiles + DR"]
+        H3["Pacman
+        Kasten backup policy"]
     end
 ```
 
