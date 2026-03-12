@@ -16,63 +16,32 @@ In addition to deploying Kubernetes, the Terraform IaC will optionally install A
 
 ## Architecture
 
-```text
-                           terraform apply
-                                  |
-                                  v
-                   +-------------------------------+
-                   |     Terraform provisions      |
-                   |                               |
-                   |  +-------------+-----------+  |
-                   |  | Kubernetes  | Object    |  |
-                   |  | Cluster     | Storage   |  |
-                   |  | (EKS/AKS/   | (S3/Blob/ |  |
-                   |  |  GKE)       |  GCS)     |  |
-                   |  +-------------+-----------+  |
-                   |  | Networking  | Secrets   |  |
-                   |  | (VPC/VNet)  | Store     |  |
-                   |  +-------------+-----------+  |
-                   |  | IAM / IRSA              |  |
-                   |  +-------------------------+  |
-                   +-------------------------------+
-                                   |
-                                   v
-                          argocd_deployment?
-                         /                 \
-                        /                   \
-                     false                 true
-                       |                     |
-                       v                     v
-                     Done.    +-------------------------------+
-                              | Terraform installs ArgoCD     |
-                              | via Helm                      |
-                              +-------------------------------+
-                                             |
-                                             v
-                              +-------------------------------+
-                              | Terraform renders templates   |
-                              | and commits ArgoCD manifests  |
-                              | to GitHub                     |
-                              +-------------------------------+
-                                             |
-                                             v
-                              kubectl apply -f app-of-apps.yaml
-                                             |
-                                             v
-                              +-------------------------------+
-                              |   ArgoCD syncs applications   |
-                              |                               |
-                              |  +-------------------------+  |
-                              |  | External Secrets        |  |
-                              |  | Operator                |  |
-                              |  +-------------------------+  |
-                              |  | Kasten K10              |  |
-                              |  | + Profiles + DR         |  |
-                              |  +-------------------------+  |
-                              |  | Pacman                  |  |
-                              |  | + Kasten backup policy  |  |
-                              |  +-------------------------+  |
-                              +-------------------------------+
+```mermaid
+flowchart TD
+    A[terraform apply] --> B
+
+    subgraph B[Terraform provisions infrastructure]
+        direction LR
+        B1[Kubernetes Cluster\nEKS / AKS / GKE]
+        B2[Networking\nVPC / VNet]
+        B3[Object Storage\nS3 / Blob / GCS]
+        B4[Secrets Store\nSM / KV / SM]
+        B5[IAM / IRSA]
+    end
+
+    B --> C{argocd_deployment?}
+    C -- false --> D[Done]
+    C -- true --> E[Install ArgoCD via Helm]
+    E --> F[Render templates and\ncommit manifests to GitHub]
+    F --> G[kubectl apply -f app-of-apps.yaml]
+    G --> H
+
+    subgraph H[ArgoCD syncs applications]
+        direction LR
+        H1[External Secrets Operator\nSyncs secrets from cloud]
+        H2[Kasten K10\nProfiles + DR]
+        H3[Pacman\nKasten backup policy]
+    end
 ```
 
 ## Prerequisites
