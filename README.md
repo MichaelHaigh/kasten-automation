@@ -21,16 +21,51 @@ flowchart LR
     A(terraform apply) --> B
 
     subgraph B["Infrastructure"]
+        B1("Kubernetes Cluster
+        (EKS / AKS / GKE)") ~~~ B2("Networking
+        (VPC / VNet)") ~~~ B3("Object Storage
+        (S3 / Blob / GCS)") ~~~ B4("Secrets Store
+        (SM / KV / SM)") ~~~ B5("Identity
+        (IAM / IRSA)")
+    end
+
+    B --> C{argocd_deployment?}
+    C -- true --> E("Install ArgoCD
+    via Helm")
+    C -- false --> D(Done)
+    E --> F("Render templates
+    and commit manifests
+    to GitHub")
+    F --> G("kubectl apply \
+    -f app-of-apps.yaml")
+    G --> H
+
+    subgraph H["ArgoCD app-of-apps"]
+        H1("External Secrets
+        Operator ") ~~~ H2("Kasten K10 +
+        Profiles + DR") ~~~ H3("Pacman +
+        backup policy")
+    end
+```
+
+Spacing.
+
+```mermaid
+flowchart TB
+    A(terraform apply) --> B
+
+    subgraph B["Infrastructure"]
         direction TB
         B1("Kubernetes Cluster
-        EKS / AKS / GKE")
+        (EKS / AKS / GKE)")
         B2("Networking
-        VPC / VNet")
+        (VPC / VNet)")
         B3("Object Storage
-        S3 / Blob / GCS")
+        (S3 / Blob / GCS)")
         B4("Secrets Store
-        SM / KV / SM")
-        B5("IAM / IRSA")
+        (SM / KV / SM)")
+        B5("Identity
+        (IAM / IRSA)")
     end
 
     B --> C{argocd_deployment?}
@@ -38,17 +73,18 @@ flowchart LR
     C -- true --> E("Install ArgoCD via Helm")
     E --> F("Render templates and
     commit manifests to GitHub")
-    F --> G("kubectl apply -f app-of-apps.yaml")
+    F --> G("kubectl apply \
+    -f app-of-apps.yaml")
     G --> H
 
     subgraph H["ArgoCD syncs applications"]
         direction TB
-        H1("External Secrets Operator
-        Syncs secrets from cloud")
-        H2("Kasten K10
+        H1("External Secrets
+        Operator")
+        H2("Kasten K10 +
         Profiles + DR")
-        H3("Pacman
-        Kasten backup policy")
+        H3("Pacman +
+        backup policy")
     end
 ```
 
