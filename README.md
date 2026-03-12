@@ -17,11 +17,11 @@ In addition to deploying Kubernetes, the Terraform IaC will optionally install A
 ## Architecture
 
 ```mermaid
-flowchart TD
-    A[terraform apply] --> B
+flowchart LR
+    A(terraform apply) --> B
 
     subgraph B["Infrastructure"]
-        direction LR
+        direction TB
         B1("Kubernetes Cluster
         EKS / AKS / GKE")
         B2("Networking
@@ -34,15 +34,15 @@ flowchart TD
     end
 
     B --> C{argocd_deployment?}
-    C -- false --> D[Done]
-    C -- true --> E["Install ArgoCD via Helm"]
-    E --> F["Render templates and
-    commit manifests to GitHub"]
-    F --> G["kubectl apply -f app-of-apps.yaml"]
+    C -- false --> D(Done)
+    C -- true --> E("Install ArgoCD via Helm")
+    E --> F("Render templates and
+    commit manifests to GitHub")
+    F --> G("kubectl apply -f app-of-apps.yaml")
     G --> H
 
     subgraph H["ArgoCD syncs applications"]
-        direction LR
+        direction TB
         H1("External Secrets Operator
         Syncs secrets from cloud")
         H2("Kasten K10
