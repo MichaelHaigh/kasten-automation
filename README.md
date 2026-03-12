@@ -48,46 +48,6 @@ flowchart LR
     end
 ```
 
-Spacing.
-
-```mermaid
-flowchart TB
-    A(terraform apply) --> B
-
-    subgraph B["Infrastructure"]
-        direction TB
-        B1("Kubernetes Cluster
-        (EKS / AKS / GKE)")
-        B2("Networking
-        (VPC / VNet)")
-        B3("Object Storage
-        (S3 / Blob / GCS)")
-        B4("Secrets Store
-        (SM / KV / SM)")
-        B5("Identity
-        (IAM / IRSA)")
-    end
-
-    B --> C{argocd_deployment?}
-    C -- false --> D(Done)
-    C -- true --> E("Install ArgoCD via Helm")
-    E --> F("Render templates and
-    commit manifests to GitHub")
-    F --> G("kubectl apply \
-    -f app-of-apps.yaml")
-    G --> H
-
-    subgraph H["ArgoCD syncs applications"]
-        direction TB
-        H1("External Secrets
-        Operator")
-        H2("Kasten K10 +
-        Profiles + DR")
-        H3("Pacman +
-        backup policy")
-    end
-```
-
 ## Prerequisites
 
 The following tools must be installed locally:
