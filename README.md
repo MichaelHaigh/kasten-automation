@@ -13,6 +13,9 @@ In addition to deploying Kubernetes, the Terraform IaC will optionally install A
   * [External Secrets Operator](https://external-secrets.io/latest/) to securely generate Kubernetes secrets on the deployed cluster
   * [Kasten K10](https://github.com/kastenhq/k10/tree/master/helm/k10) with infrastructure and location profiles to store Kubernetes application backups, and disaster recovery configured for Azure and AWS
   * [Pacman](https://github.com/MichaelHaigh/pacman) demo application with a Kasten policy for protection
+  * (Azure, optional) [cert-manager](https://cert-manager.io/) with Cloudflare DNS-01 validation for TLS certificates
+  * (Azure, optional) [Envoy Gateway](https://gateway.envoyproxy.io/) with [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for HTTPS routing
+  * (Azure, optional) [ExternalDNS](https://kubernetes-sigs.github.io/external-dns/) for automatic Cloudflare DNS record management
 
 ## Architecture
 
@@ -45,6 +48,16 @@ flowchart LR
         Operator ") ~~~ H2("Kasten K10 +
         Profiles + DR") ~~~ H3("Pacman +
         backup policy")
+    end
+
+    G -. "cert_manager_deployment
+    (Azure only)" .-> I
+
+    subgraph I["Gateway API Stack"]
+        I1("cert-manager +
+        ClusterIssuer") ~~~ I2("Envoy Gateway +
+        Gateway") ~~~ I3("ExternalDNS +
+        HTTPRoutes")
     end
 ```
 

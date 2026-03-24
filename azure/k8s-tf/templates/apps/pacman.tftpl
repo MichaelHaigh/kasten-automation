@@ -20,7 +20,7 @@ spec:
         releaseName: pacman
         valuesObject:
           service:
-            type: LoadBalancer
+            type: ${cert_manager_deployment ? "ClusterIP" : "LoadBalancer"}
     - repoURL: ${thisRepoURL}
       targetRevision: ${targetRevision}
       path: azure/argocd/addons/pacman
