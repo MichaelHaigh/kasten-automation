@@ -1,0 +1,26 @@
+# Auto-generated file, do not edit directly
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-10"
+  name: envoy-gateway
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: envoy-gateway-system
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: oci://docker.io/envoyproxy/gateway-helm
+    targetRevision: 1.7.1
+    chart: gateway-helm
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true
