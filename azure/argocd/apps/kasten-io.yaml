@@ -38,6 +38,15 @@ spec:
     - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
       targetRevision: certmanager
       path: azure/argocd/addons/kasten-io
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+        - .spec.rules[].backendRefs[].group
+        - .spec.rules[].backendRefs[].kind
+        - .spec.rules[].backendRefs[].weight
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
