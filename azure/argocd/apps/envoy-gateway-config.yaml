@@ -17,6 +17,20 @@ spec:
     repoURL: https://github.com/MichaelHaigh/kasten-automation.git
     targetRevision: certmanager
     path: azure/argocd/addons/envoy-gateway-config
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+        - .spec.rules[].backendRefs[].group
+        - .spec.rules[].backendRefs[].kind
+        - .spec.rules[].backendRefs[].weight
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      jqPathExpressions:
+        - .spec.listeners[].tls.certificateRefs[].group
+        - .spec.listeners[].tls.certificateRefs[].kind
   syncPolicy:
     automated:
       prune: true
