@@ -5,7 +5,7 @@ metadata:
   name: certmanager-gateway
   namespace: envoy-gateway-system
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   gatewayClassName: eg
   listeners:
