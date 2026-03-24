@@ -15,7 +15,7 @@ spec:
   project: default
   source:
     repoURL: oci://docker.io/envoyproxy/gateway-helm
-    targetRevision: 1.7.1
+    targetRevision: v1.7.1
     chart: gateway-helm
   syncPolicy:
     syncOptions:
