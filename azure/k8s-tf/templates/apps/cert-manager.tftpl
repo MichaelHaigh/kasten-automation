@@ -21,6 +21,30 @@ spec:
       valuesObject:
         crds:
           enabled: true
+        config:
+          apiVersion: controller.config.cert-manager.io/v1alpha1
+          enableGatewayAPI: true
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: cert-manager-webhook
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector
+        - .webhooks[].objectSelector
+        - .webhooks[].clientConfig.service.port
+        - .webhooks[].rules[].scope
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      name: cert-manager-webhook
+      jsonPointers:
+        - /webhooks/0/clientConfig/caBundle
+      jqPathExpressions:
+        - .webhooks[].namespaceSelector
+        - .webhooks[].objectSelector
+        - .webhooks[].clientConfig.service.port
+        - .webhooks[].rules[].scope
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

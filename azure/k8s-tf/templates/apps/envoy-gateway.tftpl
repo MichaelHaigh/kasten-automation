@@ -13,8 +13,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: oci://docker.io/envoyproxy/gateway-helm
-    targetRevision: ${envoy_gateway_version}
+    repoURL: docker.io/envoyproxy
+    targetRevision: v${envoy_gateway_version}
     chart: gateway-helm
   syncPolicy:
     syncOptions:

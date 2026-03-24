@@ -105,6 +105,9 @@ locals {
       letsencrypt_staging = var.letsencrypt_staging
     }
   )
+  addons-envoy-gateway-gatewayclass = templatefile(
+    "${path.module}/templates/addons/envoy-gateway-config/gatewayclass.tftpl", {}
+  )
   addons-envoy-gateway-gateway = templatefile(
     "${path.module}/templates/addons/envoy-gateway-config/gateway.tftpl", {
       workspace           = terraform.workspace
@@ -335,6 +338,15 @@ resource "github_repository_file" "addons_certmanager_cluster_issuer" {
   file                = "azure/argocd/addons/cert-manager-config/cluster-issuer.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cert-manager-cluster-issuer)
   commit_message      = "automated(${terraform.workspace}): update addons/cert-manager-config/cluster-issuer.yaml via 'terraform apply/destroy'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "addons_envoygateway_gatewayclass" {
+  count               = (var.deployment.cert_manager) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "azure/argocd/addons/envoy-gateway-config/gatewayclass.yaml"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-envoy-gateway-gatewayclass)
+  commit_message      = "automated(${terraform.workspace}): update addons/envoy-gateway-config/gatewayclass.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_envoygateway_gateway" {

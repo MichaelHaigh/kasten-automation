@@ -16,6 +16,15 @@ spec:
     repoURL: ${thisRepoURL}
     targetRevision: ${targetRevision}
     path: azure/argocd/addons/argocd
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+        - .spec.rules[].backendRefs[].group
+        - .spec.rules[].backendRefs[].kind
+        - .spec.rules[].backendRefs[].weight
   syncPolicy:
     automated:
       prune: true
