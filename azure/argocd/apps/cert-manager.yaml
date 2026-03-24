@@ -22,6 +22,9 @@ spec:
       valuesObject:
         crds:
           enabled: true
+        config:
+          apiVersion: controller.config.cert-manager.io/v1alpha1
+          enableGatewayAPI: true
   ignoreDifferences:
     - group: admissionregistration.k8s.io
       kind: ValidatingWebhookConfiguration
