@@ -12,7 +12,7 @@ output "_2_argocd_apply_app_of_apps_cmd" {
 }
 output "_3_argocd_endpoint" {
   description = "The URL to access the ArgoCD UI"
-  value       = var.deployment.argocd ? (var.deployment.cert_manager ? "https://argocd.${terraform.workspace}.${var.domain_name} (once Gateway is up)" : "https://${data.kubernetes_service.argocd_server[0].status.0.load_balancer.0.ingress[0].ip}") : "ArgoCD not deployed"
+  value       = var.deployment.argocd ? (var.deployment.cert_manager ? "https://argocd.${terraform.workspace}.${var.domain_name} # once Gateway is up" : "https://${data.kubernetes_service.argocd_server[0].status.0.load_balancer.0.ingress[0].ip}") : "ArgoCD not deployed"
 }
 output "_4_argocd_admin_secret_copy_cmd" {
   description = "A command to copy the ArgoCD initial admin secret to the clipboard"
@@ -37,5 +37,5 @@ output "argocd_admin_secret" {
 }
 output "argocd_port_forward_cmd" {
   description = "Port-forward command to access ArgoCD UI locally before Gateway is available"
-  value       = (var.deployment.argocd && var.deployment.cert_manager) ? "kubectl port-forward svc/argocd-server -n argocd 8080:80, then open http://localhost:8080" : "Not needed (ArgoCD has LoadBalancer)"
+  value       = (var.deployment.argocd && var.deployment.cert_manager) ? "open http://localhost:8080; kubectl port-forward svc/argocd-server -n argocd 8080:80" : "Not needed (ArgoCD has LoadBalancer)"
 }

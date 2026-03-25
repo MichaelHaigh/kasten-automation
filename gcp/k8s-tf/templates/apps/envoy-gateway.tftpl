@@ -3,24 +3,19 @@ kind: Application
 metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "-10"
-  name: external-secrets
+  name: envoy-gateway
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
-    namespace: external-secrets
+    namespace: envoy-gateway-system
     server: https://kubernetes.default.svc
   project: default
-  sources:
-    - repoURL: https://charts.external-secrets.io
-      targetRevision: ${eso_version}
-      chart: external-secrets
-      helm:
-        releaseName: external-secrets
-    - repoURL: ${thisRepoURL}
-      targetRevision: ${targetRevision}
-      path: gcp/argocd/addons/external-secrets
+  source:
+    repoURL: docker.io/envoyproxy
+    targetRevision: v${envoy_gateway_version}
+    chart: gateway-helm
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
