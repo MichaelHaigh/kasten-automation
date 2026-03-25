@@ -13,9 +13,9 @@ In addition to deploying Kubernetes, the Terraform IaC will optionally install A
   * [External Secrets Operator](https://external-secrets.io/latest/) to securely generate Kubernetes secrets on the deployed cluster
   * [Kasten K10](https://github.com/kastenhq/k10/tree/master/helm/k10) with infrastructure and location profiles to store Kubernetes application backups, and disaster recovery configured for Azure and AWS
   * [Pacman](https://github.com/MichaelHaigh/pacman) demo application with a Kasten policy for protection
-  * (Azure, optional) [cert-manager](https://cert-manager.io/) with Cloudflare DNS-01 validation for TLS certificates
-  * (Azure, optional) [Envoy Gateway](https://gateway.envoyproxy.io/) with [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for HTTPS routing
-  * (Azure, optional) [ExternalDNS](https://kubernetes-sigs.github.io/external-dns/) for automatic Cloudflare DNS record management
+  * (optional) [cert-manager](https://cert-manager.io/) with Cloudflare DNS-01 validation for TLS certificates
+  * (optional) [Envoy Gateway](https://gateway.envoyproxy.io/) with [Kubernetes Gateway API](https://gateway-api.sigs.k8s.io/) for HTTPS routing
+  * (optional) [ExternalDNS](https://kubernetes-sigs.github.io/external-dns/) for automatic Cloudflare DNS record management
 
 ## Architecture
 
@@ -32,7 +32,7 @@ flowchart LR
         (IAM / IRSA)")
     end
 
-    B --> C{argocd_deployment?}
+    B --> C{deployment.argocd?}
     C -- true --> E("Install ArgoCD
     via Helm")
     C -- false --> D(Done)
@@ -50,8 +50,7 @@ flowchart LR
         backup policy")
     end
 
-    G -. "cert_manager_deployment
-    (Azure only)" .-> I
+    G -. "deployment.cert_manager" .-> I
 
     subgraph I["Gateway API Stack"]
         I1("cert-manager +
@@ -95,7 +94,7 @@ terraform apply -var-file="$(terraform workspace show).tfvars" && git pull
 
 The `git pull` is required because Terraform commits generated ArgoCD manifests to the remote branch via the GitHub provider, so `git pull` syncs those commits locally.
 
-If `argocd_deployment` is set to `true`, configure kubeconfig using the command from the `_1_` output variable, then deploy the ArgoCD app-of-apps manifest to kick off GitOps syncing:
+If `deployment.argocd` is set to `true`, configure kubeconfig using the command from the `_1_` output variable, then deploy the ArgoCD app-of-apps manifest to kick off GitOps syncing:
 
 ```text
 kubectl apply -f ../argocd/app-of-apps.yaml

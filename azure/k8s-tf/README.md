@@ -95,6 +95,8 @@ _7_pacman_url = "https://pacman.default.example.com"
 argocd_port_forward_cmd = "kubectl port-forward svc/argocd-server -n argocd 8080:80, then open http://localhost:8080"
 ```
 
+> **Note**: When `deployment.cert_manager = true`, it will take approximately 20 minutes for all workloads to come up after applying the app-of-apps YAML. This includes time for cert-manager to issue a wildcard TLS certificate via Let's Encrypt DNS-01 validation, Envoy Gateway to provision a load balancer, and ExternalDNS to create Cloudflare A records.
+
 Additional detail on these outputs:
 
 * `_1_cloud_kubeconfig_cmd`: an `az` command to configure kubeconfig credentials

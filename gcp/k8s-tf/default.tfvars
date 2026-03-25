@@ -53,7 +53,7 @@ deployment = {
 argocd_version     = "9.1.6"             # Only relevant if deployment.argocd is true
 eso_version        = "1.1.1"             # Only relevant if deployment.argocd is true
 kasten_version     = "8.5.1"             # Only relevant if deployment.argocd is true
-pacman_version     = "0.1.26"            # Only relevant if deployment.argocd is true
+pacman_version     = "0.1.28"            # Only relevant if deployment.argocd is true
 kasten_eula_accept = true                # Only relevant if deployment.argocd is true
 email              = "m.haigh@veeam.com" # Only relevant if deployment.argocd is true (also used for Let's Encrypt)
 
