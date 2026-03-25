@@ -73,6 +73,25 @@ When enabled, all applications (ArgoCD, Kasten, Pacman) are accessible via TLS-e
 
 The bottom of the `tfvars` file contains an `authorized_networks` list which permits access to the deployed resources. You should update the values (and optionally add additional values) to match any IP ranges that you wish to access the environment from (`curl http://checkip.amazonaws.com` is a useful command to figure out your IP address).
 
+## ArgoCD Applications
+
+The following applications are deployed via the [app-of-apps](https://argo-cd.readthedocs.io/en/latest/operator-manual/cluster-bootstrapping/#app-of-apps-pattern) pattern, ordered by [sync wave](https://argo-cd.readthedocs.io/en/latest/user-guide/sync-waves/):
+
+| Sync Wave | Application | Description |
+|---|---|---|
+| -10 | external-secrets | External Secrets Operator (ESO) with ClusterSecretStore |
+| -10 | cert-manager * | cert-manager with CRDs and Gateway API support |
+| -10 | envoy-gateway * | Envoy Gateway (Gateway API controller) |
+| -8 | cert-manager-config * | ClusterIssuer and Cloudflare API token ExternalSecret |
+| -8 | envoy-gateway-config * | GatewayClass, Gateway (wildcard TLS), and HTTP-to-HTTPS redirect |
+| -8 | external-dns * | ExternalDNS with Cloudflare provider and gateway-httproute source |
+| -8 | argocd-gateway * | ArgoCD HTTPRoute |
+| -5 | kasten-io | Kasten K10 with token auth, EULA, and Kasten HTTPRoute * |
+| -1 | kasten-profiles | Infrastructure and location profiles for Kasten backups |
+| 5 | pacman | Pacman demo app with backup policy and Pacman HTTPRoute * |
+
+\* Only deployed when `deployment.cert_manager = true`
+
 ## Output Variables
 
 Once Terraform has finished deploying, there will be several output variables displayed, for example:
