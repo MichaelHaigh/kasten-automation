@@ -1,4 +1,4 @@
-# GitOps for Kasten — Infrastructure and Data Protection as Code
+# GitOps for Kasten: Infrastructure and Data Protection as Code
 
 This repository contains Terraform code which creates hyperscaler Kubernetes-as-a-Service offerings:
 
