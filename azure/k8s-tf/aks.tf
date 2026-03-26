@@ -1,3 +1,33 @@
+# Cleanup ArgoCD applications and cloud resources before destroying infrastructure.
+# Phase 1: Delete ArgoCD apps that own HTTPRoutes (while ExternalDNS is still running)
+#           so ExternalDNS can clean up Cloudflare DNS records.
+# Phase 2: Delete all remaining ArgoCD apps (including ExternalDNS itself).
+# Phase 3: Delete any remaining Gateway/LoadBalancer resources for cloud cleanup.
+resource "null_resource" "k8s_cleanup" {
+  triggers = {
+    cluster_name    = azurerm_kubernetes_cluster.aks_cluster.name
+    resource_group  = azurerm_resource_group.aks_resource_group.name
+  }
+
+  depends_on = [
+    azurerm_kubernetes_cluster.aks_cluster
+  ]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<-EOT
+      az aks get-credentials --resource-group ${self.triggers.resource_group} --name ${self.triggers.cluster_name} --overwrite-existing &&
+      kubectl delete application -n argocd pacman kasten-io argocd-gateway envoy-gateway-config --ignore-not-found &&
+      sleep 60 &&
+      kubectl delete applications -n argocd --all --ignore-not-found &&
+      sleep 30 &&
+      kubectl delete gateway --all-namespaces --all --ignore-not-found &&
+      kubectl delete svc --all-namespaces --field-selector spec.type=LoadBalancer &&
+      sleep 90 || true
+    EOT
+  }
+}
+
 resource "azurerm_kubernetes_cluster" "aks_cluster" {
   name                                = "${var.creator_tag}-${terraform.workspace}-aks"
   location                            = azurerm_resource_group.aks_resource_group.location

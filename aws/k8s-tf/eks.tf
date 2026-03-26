@@ -1,4 +1,8 @@
-# Cleanup Kubernetes LoadBalancer services before destroying VPC infrastructure
+# Cleanup ArgoCD applications and cloud resources before destroying infrastructure.
+# Phase 1: Delete ArgoCD apps that own HTTPRoutes (while ExternalDNS is still running)
+#           so ExternalDNS can clean up Cloudflare DNS records.
+# Phase 2: Delete all remaining ArgoCD apps (including ExternalDNS itself).
+# Phase 3: Delete any remaining Gateway/LoadBalancer resources for cloud cleanup.
 resource "null_resource" "k8s_cleanup" {
   triggers = {
     cluster_name = aws_eks_cluster.eks_cluster.name
@@ -14,6 +18,10 @@ resource "null_resource" "k8s_cleanup" {
     when    = destroy
     command = <<-EOT
       aws eks update-kubeconfig --name ${self.triggers.cluster_name} --region ${self.triggers.region} &&
+      kubectl delete application -n argocd pacman kasten-io argocd-gateway envoy-gateway-config --ignore-not-found &&
+      sleep 60 &&
+      kubectl delete applications -n argocd --all --ignore-not-found &&
+      sleep 30 &&
       kubectl delete gateway --all-namespaces --all --ignore-not-found &&
       kubectl delete svc --all-namespaces --field-selector spec.type=LoadBalancer &&
       sleep 90 || true

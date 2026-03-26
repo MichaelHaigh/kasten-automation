@@ -54,7 +54,7 @@ Set `deployment.argocd = true` to enable ArgoCD deployment and GitOps file commi
 
 Set `deployment.cert_manager = true` to enable cert-manager, Envoy Gateway, ExternalDNS, and Kubernetes Gateway API resources. This requires `deployment.argocd = true`.
 
-When enabled, all applications (ArgoCD, Kasten, Pacman) are accessible via TLS-enabled subdomains using the naming convention `{app}.{workspace}.{domain_name}` (e.g. `argocd.default.example.com`). A single wildcard certificate (`*.{workspace}.{domain_name}`) is issued by cert-manager via a Cloudflare DNS-01 challenge, covering all subdomains. ExternalDNS automatically creates Cloudflare A records by watching HTTPRoute resources.
+When enabled, all applications (ArgoCD, Kasten, Pacman) are accessible via TLS-enabled subdomains using the naming convention `{app}.{creator}-{workspace}.{domain_name}` (e.g. `argocd.mhaigh-default.example.com`). A single wildcard certificate (`*.{creator}-{workspace}.{domain_name}`) is issued by cert-manager via a Cloudflare DNS-01 challenge, covering all subdomains. ExternalDNS automatically creates Cloudflare A records by watching HTTPRoute resources.
 
 | Variable | Description |
 |---|---|
@@ -109,13 +109,13 @@ _6_kasten_token_cmd = "kubectl --namespace kasten-io create token dashboard-sa -
 When `deployment.cert_manager = true`, some outputs change to domain-based URLs:
 
 ```text
-_3_argocd_endpoint = "https://argocd.default.example.com (once Gateway is up)"
-_5_kasten_dashboard_cmd = "open https://kasten.default.example.com/k10/"
-_7_pacman_url = "https://pacman.default.example.com"
+_3_argocd_endpoint = "https://argocd.mhaigh-default.example.com (once Gateway is up)"
+_5_kasten_dashboard_cmd = "open https://kasten.mhaigh-default.example.com/k10/"
+_7_pacman_url = "https://pacman.mhaigh-default.example.com"
 argocd_port_forward_cmd = "kubectl port-forward svc/argocd-server -n argocd 8080:80, then open http://localhost:8080"
 ```
 
-> **Note**: When `deployment.cert_manager = true`, it will take approximately 20 minutes for all workloads to come up after applying the app-of-apps YAML. This includes time for cert-manager to issue a wildcard TLS certificate via Let's Encrypt DNS-01 validation, Envoy Gateway to provision a load balancer, and ExternalDNS to create Cloudflare A records.
+> **Note**: When `deployment.cert_manager = true`, it will take 10 to 20 minutes for all workloads to come up after applying the app-of-apps YAML. This includes time for cert-manager to issue a wildcard TLS certificate via Let's Encrypt DNS-01 validation, Envoy Gateway to provision a load balancer, and ExternalDNS to create Cloudflare A records.
 
 Additional detail on these outputs:
 

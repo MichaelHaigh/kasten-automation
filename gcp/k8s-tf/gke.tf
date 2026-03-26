@@ -1,5 +1,35 @@
 data "google_client_config" "default" {}
 
+# Cleanup ArgoCD applications and cloud resources before destroying infrastructure.
+# Phase 1: Delete ArgoCD apps that own HTTPRoutes (while ExternalDNS is still running)
+#           so ExternalDNS can clean up Cloudflare DNS records.
+# Phase 2: Delete all remaining ArgoCD apps (including ExternalDNS itself).
+# Phase 3: Delete any remaining Gateway/LoadBalancer resources for cloud cleanup.
+resource "null_resource" "k8s_cleanup" {
+  triggers = {
+    cluster_name = module.gke.name
+    zone         = var.gcp_zones[0]
+  }
+
+  depends_on = [
+    module.gke
+  ]
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = <<-EOT
+      gcloud container clusters get-credentials ${self.triggers.cluster_name} --zone ${self.triggers.zone} &&
+      kubectl delete application -n argocd pacman kasten-io argocd-gateway envoy-gateway-config --ignore-not-found &&
+      sleep 60 &&
+      kubectl delete applications -n argocd --all --ignore-not-found &&
+      sleep 30 &&
+      kubectl delete gateway --all-namespaces --all --ignore-not-found &&
+      kubectl delete svc --all-namespaces --field-selector spec.type=LoadBalancer &&
+      sleep 90 || true
+    EOT
+  }
+}
+
 # GKE Config
 module "gke" {
 

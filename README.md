@@ -60,6 +60,12 @@ flowchart LR
     end
 ```
 
+## Screenshots
+
+| ArgoCD | Kasten K10 | Pacman |
+|---|---|---|
+| ![ArgoCD](images/argocd.png) | ![Kasten K10](images/kasten.png) | ![Pacman](images/pacman.png) |
+
 ## Prerequisites
 
 The following tools must be installed locally:
