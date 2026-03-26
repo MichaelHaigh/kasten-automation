@@ -159,6 +159,7 @@ resource "github_repository_file" "addons_externalsecrets_clustersecretstore" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cluster-secret-store)
   commit_message      = "automated(${terraform.workspace}): update addons/external-secrets/cluster-secret-store.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastenio_externalsecret" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -168,6 +169,7 @@ resource "github_repository_file" "addons_kastenio_externalsecret" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/external-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastenprofiles_infrastructure" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -177,6 +179,7 @@ resource "github_repository_file" "addons_kastenprofiles_infrastructure" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-infrastructure)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/infrastructure.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastendr_policy" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -186,6 +189,7 @@ resource "github_repository_file" "addons_kastendr_policy" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-kasten-dr-policy)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-dr/dr-policy.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastendr_secret" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -195,6 +199,7 @@ resource "github_repository_file" "addons_kastendr_secret" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-kasten-dr-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-dr/dr-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastenprofiles_location" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -204,6 +209,7 @@ resource "github_repository_file" "addons_kastenprofiles_location" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-location)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-profiles/location.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_pacman_backup" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -213,6 +219,7 @@ resource "github_repository_file" "addons_pacman_backup" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-pacman-backup)
   commit_message      = "automated(${terraform.workspace}): update addons/pacman/pacman-backup.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 
 # Apps files
@@ -224,6 +231,7 @@ resource "github_repository_file" "app_of_apps" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.app-of-apps)
   commit_message      = "automated(${terraform.workspace}): update app-of-apps.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_external_secrets" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -233,6 +241,7 @@ resource "github_repository_file" "apps_external_secrets" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-external-secrets)
   commit_message      = "automated(${terraform.workspace}): update apps/external-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_kasten_io" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -242,6 +251,7 @@ resource "github_repository_file" "apps_kasten_io" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-io)
   commit_message      = "automated(${terraform.workspace}): update apps/kasten-io.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_kasten_profiles" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -251,6 +261,7 @@ resource "github_repository_file" "apps_kasten_profiles" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-profiles)
   commit_message      = "automated(${terraform.workspace}): update apps/kasten-profiles.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_kasten_dr" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -260,6 +271,7 @@ resource "github_repository_file" "apps_kasten_dr" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-kasten-dr)
   commit_message      = "automated(${terraform.workspace}): update apps/kasten-dr.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_pacman" {
   count               = (var.deployment.argocd) ? 1 : 0
@@ -269,6 +281,7 @@ resource "github_repository_file" "apps_pacman" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-pacman)
   commit_message      = "automated(${terraform.workspace}): update apps/pacman.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 
 # cert-manager / Gateway API apps files
@@ -280,6 +293,7 @@ resource "github_repository_file" "apps_cert_manager" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-cert-manager)
   commit_message      = "automated(${terraform.workspace}): update apps/cert-manager.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_cert_manager_config" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -289,6 +303,7 @@ resource "github_repository_file" "apps_cert_manager_config" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-cert-manager-config)
   commit_message      = "automated(${terraform.workspace}): update apps/cert-manager-config.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_envoy_gateway" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -298,6 +313,7 @@ resource "github_repository_file" "apps_envoy_gateway" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-envoy-gateway)
   commit_message      = "automated(${terraform.workspace}): update apps/envoy-gateway.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_envoy_gateway_config" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -307,6 +323,7 @@ resource "github_repository_file" "apps_envoy_gateway_config" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-envoy-gateway-config)
   commit_message      = "automated(${terraform.workspace}): update apps/envoy-gateway-config.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_external_dns" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -316,6 +333,7 @@ resource "github_repository_file" "apps_external_dns" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-external-dns)
   commit_message      = "automated(${terraform.workspace}): update apps/external-dns.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "apps_argocd_gateway" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -325,6 +343,7 @@ resource "github_repository_file" "apps_argocd_gateway" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.apps-argocd-gateway)
   commit_message      = "automated(${terraform.workspace}): update apps/argocd-gateway.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 
 # cert-manager / Gateway API addons files
@@ -336,6 +355,7 @@ resource "github_repository_file" "addons_certmanager_cloudflare_secret" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cert-manager-cloudflare-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/cert-manager-config/cloudflare-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_certmanager_cluster_issuer" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -345,6 +365,7 @@ resource "github_repository_file" "addons_certmanager_cluster_issuer" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-cert-manager-cluster-issuer)
   commit_message      = "automated(${terraform.workspace}): update addons/cert-manager-config/cluster-issuer.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_envoygateway_gatewayclass" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -354,6 +375,7 @@ resource "github_repository_file" "addons_envoygateway_gatewayclass" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-envoy-gateway-gatewayclass)
   commit_message      = "automated(${terraform.workspace}): update addons/envoy-gateway-config/gatewayclass.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_envoygateway_gateway" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -363,6 +385,7 @@ resource "github_repository_file" "addons_envoygateway_gateway" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-envoy-gateway-gateway)
   commit_message      = "automated(${terraform.workspace}): update addons/envoy-gateway-config/gateway.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_envoygateway_http_redirect" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -372,6 +395,7 @@ resource "github_repository_file" "addons_envoygateway_http_redirect" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-envoy-gateway-http-redirect)
   commit_message      = "automated(${terraform.workspace}): update addons/envoy-gateway-config/http-redirect.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_externaldns_cloudflare_secret" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -381,6 +405,7 @@ resource "github_repository_file" "addons_externaldns_cloudflare_secret" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-dns-cloudflare-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/external-dns/cloudflare-secret.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_argocd_httproute" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -390,6 +415,7 @@ resource "github_repository_file" "addons_argocd_httproute" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-argocd-httproute)
   commit_message      = "automated(${terraform.workspace}): update addons/argocd/httproute.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_kastenio_httproute" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -399,6 +425,7 @@ resource "github_repository_file" "addons_kastenio_httproute" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-kasten-httproute)
   commit_message      = "automated(${terraform.workspace}): update addons/kasten-io/httproute.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }
 resource "github_repository_file" "addons_pacman_httproute" {
   count               = (var.deployment.cert_manager) ? 1 : 0
@@ -408,4 +435,5 @@ resource "github_repository_file" "addons_pacman_httproute" {
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-pacman-httproute)
   commit_message      = "automated(${terraform.workspace}): update addons/pacman/httproute.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
+  depends_on          = [time_sleep.wait_for_argocd]
 }

@@ -112,7 +112,7 @@ When `deployment.cert_manager = true`, some outputs change to domain-based URLs:
 _3_argocd_endpoint = "https://argocd.mhaigh-default.example.com (once Gateway is up)"
 _5_kasten_dashboard_cmd = "open https://kasten.mhaigh-default.example.com/k10/"
 _7_pacman_url = "https://pacman.mhaigh-default.example.com"
-argocd_port_forward_cmd = "kubectl port-forward svc/argocd-server -n argocd 8080:80, then open http://localhost:8080"
+argocd_port_forward_cmd = "open http://localhost:8080; kubectl port-forward svc/argocd-server -n argocd 8080:80"
 ```
 
 > **Note**: When `deployment.cert_manager = true`, it will take 10 to 20 minutes for all workloads to come up after applying the app-of-apps YAML. This includes time for cert-manager to issue a wildcard TLS certificate via Let's Encrypt DNS-01 validation, Envoy Gateway to provision a load balancer, and ExternalDNS to create Cloudflare A records.
