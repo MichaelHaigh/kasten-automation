@@ -84,7 +84,7 @@ The following applications are deployed via the [app-of-apps](https://argo-cd.re
 | -10 | envoy-gateway * | Envoy Gateway (Gateway API controller) |
 | -8 | cert-manager-config * | ClusterIssuer and Cloudflare API token ExternalSecret |
 | -8 | envoy-gateway-config * | GatewayClass, Gateway (wildcard TLS), and HTTP-to-HTTPS redirect |
-| -8 | external-dns * | ExternalDNS with Cloudflare provider and gateway-httproute source |
+| -9 | external-dns * | ExternalDNS with Cloudflare provider and gateway-httproute source |
 | -8 | argocd-gateway * | ArgoCD HTTPRoute |
 | -5 | kasten-io | Kasten K10 with token auth, EULA, and Kasten HTTPRoute * |
 | -3 | kasten-profiles | Infrastructure and location profiles for Kasten backups |
