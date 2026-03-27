@@ -26,6 +26,7 @@ spec:
           domainFilters:
             - ${domain_name}
           policy: sync
+          triggerLoopOnEvent: true
           txtOwnerId: ${creator}-${workspace}
           env:
             - name: CF_API_TOKEN
