@@ -1,0 +1,58 @@
+# Auto-generated file, do not edit directly
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
+  name: kasten-io
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: kasten-io
+    server: https://kubernetes.default.svc
+  project: default
+  sources:
+    - repoURL: https://charts.kasten.io/
+      targetRevision: 8.5.5
+      chart: k10
+      helm:
+        releaseName: k10
+        valuesObject:
+          auth:
+            tokenAuth:
+              enabled: true
+          eula:
+            accept: true
+            company: veeam.com
+            email: m.haigh@veeam.com
+          excludedApps:
+            - gke-managed-cim
+            - gke-managed-system
+            - gke-managed-volumepopulator
+            - gmp-public
+            - gmp-system
+            - kube-node-lease
+            - kube-public
+            - kube-system
+          externalGateway:
+            create: false
+    - repoURL: https://github.com/MichaelHaigh/kasten-automation.git
+      targetRevision: us-east-2
+      path: gcp/argocd/addons/kasten-io
+  ignoreDifferences:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      jqPathExpressions:
+        - .spec.parentRefs[].group
+        - .spec.parentRefs[].kind
+        - .spec.rules[].backendRefs[].group
+        - .spec.rules[].backendRefs[].kind
+        - .spec.rules[].backendRefs[].weight
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+      selfHeal: true
