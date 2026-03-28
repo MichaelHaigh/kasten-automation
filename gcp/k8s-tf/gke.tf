@@ -79,6 +79,7 @@ resource "null_resource" "k8s_cleanup" {
     github_repository_file.addons_envoygateway_gatewayclass,
     github_repository_file.addons_envoygateway_http_redirect,
     github_repository_file.addons_externaldns_cloudflare_secret,
+    github_repository_file.addons_externaldns_predelete_hook,
     github_repository_file.addons_externalsecrets_clustersecretstore,
     github_repository_file.addons_kastenio_externalsecret,
     github_repository_file.addons_kastenio_httproute,

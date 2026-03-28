@@ -119,6 +119,9 @@ locals {
       workspace     = terraform.workspace
     }
   )
+  addons-external-dns-predelete-hook = file(
+    "${path.module}/templates/addons/external-dns/predelete-hook.tftpl"
+  )
   addons-argocd-httproute = templatefile(
     "${path.module}/templates/addons/argocd/httproute.tftpl", {
       creator   = var.creator_label
@@ -345,6 +348,15 @@ resource "github_repository_file" "addons_externaldns_cloudflare_secret" {
   file                = "gcp/argocd/addons/external-dns/cloudflare-secret.yaml"
   content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-dns-cloudflare-secret)
   commit_message      = "automated(${terraform.workspace}): update addons/external-dns/cloudflare-secret.yaml via 'terraform apply/destroy'"
+  overwrite_on_create = true
+}
+resource "github_repository_file" "addons_externaldns_predelete_hook" {
+  count               = (var.deployment.cert_manager) ? 1 : 0
+  repository          = var.github_repo
+  branch              = terraform.workspace
+  file                = "gcp/argocd/addons/external-dns/predelete-hook.yaml"
+  content             = format("# Auto-generated file, do not edit directly\n%s", local.addons-external-dns-predelete-hook)
+  commit_message      = "automated(${terraform.workspace}): update addons/external-dns/predelete-hook.yaml via 'terraform apply/destroy'"
   overwrite_on_create = true
 }
 resource "github_repository_file" "addons_argocd_httproute" {
