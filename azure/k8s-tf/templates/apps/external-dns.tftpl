@@ -7,6 +7,8 @@ metadata:
   namespace: argocd
   finalizers:
   - resources-finalizer.argocd.argoproj.io
+  - pre-delete-finalizer.argocd.argoproj.io
+  - pre-delete-finalizer.argocd.argoproj.io/cleanup
 spec:
   destination:
     namespace: external-dns
